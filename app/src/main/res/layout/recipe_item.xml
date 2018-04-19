@@ -27,7 +27,7 @@
             android:id="@+id/item_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="?android:attr/toastFrameBackground"
+            android:background="@android:drawable/screen_background_dark_transparent"
             android:backgroundTintMode="multiply"
             android:gravity="center_horizontal"
             android:text="Dish Name"

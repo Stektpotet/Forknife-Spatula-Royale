@@ -6,9 +6,6 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 
 public class LockedViewPager extends ViewPager {
-
-    public static final String TAG = LockedViewPager.class.getName();
-
     public LockedViewPager(Context context) {
         super(context);
     }

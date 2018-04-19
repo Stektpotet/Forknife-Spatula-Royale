@@ -1,8 +1,5 @@
 <resources>
-    <string name="app_name">RecipeAssistant</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="app_name">RecipeAssistant</string> <!--TODO: Name app -->
 
     <string name="nav_recipes">Recipes</string>
     <string name="nav_fridge">Fridge</string>

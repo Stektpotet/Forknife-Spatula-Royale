@@ -1,5 +1,6 @@
 package com.dunno.recipeassistant;
 
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
@@ -21,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String TAG = MainActivity.class.getName();
 
     private TabPagerAdapter mTabPagerAdapter;
-    private ProgressBar mProgressBar;
+    private ProgressBar     mProgressBar;
     private LockedViewPager mViewPager;
 
 
@@ -38,11 +39,17 @@ public class MainActivity extends AppCompatActivity {
         mViewPager = findViewById(R.id.main_viewPager);
         BottomNavigationView navigation = findViewById(R.id.main_navigationBar);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-
         mTabPagerAdapter = new TabPagerAdapter(getSupportFragmentManager());
         // Set up the ViewPager with the sections adapter.
         mViewPager.setAdapter(mTabPagerAdapter);
-        mViewPager.setCurrentItem(R.id.navigation_home);
+        navigation.setSelectedItemId(R.id.menu_navigation_fridge);
+    }
+
+    public void setActionBarTitle(String newTitle) {
+        getSupportActionBar().setTitle(newTitle);
+    }
+    public void setActionBarTitle(CharSequence newTitle) {
+        getSupportActionBar().setTitle(newTitle);
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -51,58 +58,11 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             mViewPager.setCurrentItem(item.getItemId());
+            setActionBarTitle(mViewPager.getAdapter().getPageTitle(item.getItemId()));
             return true;
         }
     };
 
-    public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
-        private String[] mDataset;
-
-        // Provide a reference to the views for each data item
-        // Complex data items may need more than one view per item, and
-        // you provide access to all the views for a data item in a view holder
-        public class ViewHolder extends RecyclerView.ViewHolder {
-            // each data item is just a string in this case
-            public ConstraintLayout itemView;
-
-            public ViewHolder(ConstraintLayout v) {
-                super(v);
-                itemView = v;
-            }
-        }
-
-        // Provide a suitable constructor (depends on the kind of dataset)
-        public ListAdapter(String[] myDataset) {
-            mDataset = myDataset;
-        }
-
-        // Create new views (invoked by the layout manager)
-        @Override
-        public ListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
-                                                         int viewType) {
-            // create a new view
-            ConstraintLayout item = (ConstraintLayout) LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.recipe_item, parent, false);
-            ViewHolder vh = new ViewHolder(item);
-            return vh;
-        }
-
-        // Replace the contents of a view (invoked by the layout manager)
-        @Override
-        public void onBindViewHolder(ViewHolder holder, int position) {
-            // - get element from your dataset at this position
-            // - replace the contents of the view with that element
-//            holder.itemView.setText(mDataset[position]);
-
-        }
-
-        @Override
-        public int getItemCount() {
-            return 0;
-        }
-
-
-    }
 
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
@@ -117,14 +77,14 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public Fragment getItem(int position) {
             switch (position) {
-                case R.id.navigation_home:
+                case R.id.menu_navigation_fridge:
+                    return FridgeFragment.newInstance(0);
+                case R.id.menu_navigation_recipes:
+                default:
                     return RecipeListFragment.newInstance(0);
-                case R.id.navigation_dashboard:
-                    return RecipeListFragment.newInstance(0);
-                case R.id.navigation_notifications:
-                    return RecipeListFragment.newInstance(0);
+                case R.id.menu_navigation_shoppingList:
+                    return ShoppingListFragment.newInstance(0);
             }
-            return RecipeListFragment.newInstance(0);
         }
 
         @Override
@@ -134,13 +94,14 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public CharSequence getPageTitle(int position) {
+
             switch (position) {
-                case R.id.navigation_home:
-                    return "Recipes"; //TODO: put these into @values/strings
-                case R.id.navigation_dashboard:
-                    return "Fridge";
-                case R.id.navigation_notifications:
-                    return "Shopping List";
+                case R.id.menu_navigation_fridge:
+                    return getBaseContext().getResources().getString(R.string.nav_fridge); //TODO: put these into @values/strings
+                case R.id.menu_navigation_recipes:
+                    return getBaseContext().getResources().getString(R.string.nav_recipes);
+                case R.id.menu_navigation_shoppingList:
+                    return getBaseContext().getResources().getString(R.string.nav_shopping);
             }
             return "How did you get here?";
         }

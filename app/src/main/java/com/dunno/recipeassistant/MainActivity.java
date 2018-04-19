@@ -1,6 +1,7 @@
 package com.dunno.recipeassistant;
 
 import android.content.res.Resources;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
@@ -30,6 +31,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Intent i = new Intent(this, RecipeActivity.class);// Used for testing. Will be removed when there is a way to open it with UI.
+        startActivityForResult(i, 1);
 
         setupUI();
     }

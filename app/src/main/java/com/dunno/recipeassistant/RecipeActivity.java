@@ -5,6 +5,7 @@ import android.app.Activity;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -13,10 +14,14 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 public class RecipeActivity extends AppCompatActivity {
 
-
+    private Button madeThisButton;
+    private SimpleFragmentPagerAdapter mFragmentPagerAdapter;
+    private ViewPager mViewPager;
 
     public class SimpleFragmentPagerAdapter extends FragmentPagerAdapter{
 
@@ -57,9 +62,6 @@ public class RecipeActivity extends AppCompatActivity {
         }
     }
 
-    private SimpleFragmentPagerAdapter mFragmentPagerAdapter;
-
-    private ViewPager mViewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,8 +70,19 @@ public class RecipeActivity extends AppCompatActivity {
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager = (ViewPager) findViewById(R.id.recipe_pageViewer);
         mViewPager.setAdapter(new SimpleFragmentPagerAdapter(getSupportFragmentManager(), RecipeActivity.this));
+
+        madeThisButton = findViewById(R.id.recipe_made_button);
+        View.OnClickListener madeThisButtonListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getApplicationContext(), CommitRecipeActivity.class);// Used for testing. Will be removed when there is a way to open it with UI.
+                startActivityForResult(i, 1);
+            }
+        };
+        madeThisButton.setOnClickListener(madeThisButtonListener);
+
     }
 
 

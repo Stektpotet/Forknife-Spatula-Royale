@@ -37,5 +37,9 @@
     <string name="nav_recipes">Recipes</string>
     <string name="nav_fridge">Fridge</string>
     <string name="nav_shopping">Shopping List</string>
+    <string name="made_recipe_button">I made this recipe</string>
+    <string name="add_all_to_shoppinglist">Add all to shoppinglist</string>
+    <string name="commit_textView_title_text">Well done</string>
+    <string name="commit_textView_ranOut">Did any ingredients run out?</string>
 
 </resources>

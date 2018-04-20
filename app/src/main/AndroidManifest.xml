@@ -20,7 +20,8 @@
         </activity>
         <activity
             android:name=".RecipeActivity"
-            android:label="@string/title_activity_recipe"></activity>
+            android:label="@string/title_activity_recipe" />
+        <activity android:name=".CommitRecipeActivity"></activity>
     </application>
 
 </manifest>

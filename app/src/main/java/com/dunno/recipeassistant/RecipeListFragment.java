@@ -2,7 +2,6 @@ package com.dunno.recipeassistant;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -137,7 +136,7 @@ public class RecipeListFragment extends Fragment {
 
             public ViewHolder(View itemView) {
                 super(itemView);
-                imageView = itemView.findViewById(R.id.recipeList_item_image);
+                imageView = itemView.findViewById(R.id.ingredient_item_image);
                 textView = itemView.findViewById(R.id.recipeList_item_title);
             }
         }

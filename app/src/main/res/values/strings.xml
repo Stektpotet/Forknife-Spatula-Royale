@@ -1,6 +1,11 @@
 <resources>
     <string name="app_name">RecipeAssistant</string> <!--TODO: Name app -->
 
+    <!-- Shared preferences -->
+    <string name="shared_preferences_version">version</string>
+    <string name="shared_preferences_expected_version">1.0</string>
+
+
     <string name="title_activity_recipe">RecipeActivity</string>
     <string name="action_settings">Settings</string>
     <string name="section_format">Hello World from section: %1$d</string>
@@ -41,5 +46,24 @@
     <string name="add_all_to_shoppinglist">Add all to shoppinglist</string>
     <string name="commit_textView_title_text">Well done</string>
     <string name="commit_textView_ranOut">Did any ingredients run out?</string>
+
+    <string-array name="ingredients">
+        <item>Milk</item>
+        <item>Eggs</item>
+        <item>Flour</item>
+        <item>Butter</item>
+        <item>Carrots</item>
+        <item>Potatoes</item>
+        <item>Chicken fillet</item>
+        <item>Minced meat</item>
+        <item>Garlic</item>
+        <item>Onions</item>
+        <item>Corn</item>
+        <item>Asparagus</item>
+        <item>Salt</item>
+        <item>Pepper</item>
+        <item>Honey</item>
+
+    </string-array>
 
 </resources>

@@ -47,8 +47,8 @@ public class MainActivity extends AppCompatActivity {
         mTabPagerAdapter = new TabPagerAdapter(getSupportFragmentManager());
         // Set up the ViewPager with the sections adapter.
         mViewPager.setAdapter(mTabPagerAdapter);
-        mViewPager.setCurrentItem(R.id.menu_navigation_fridge);
-        navigation.setSelectedItemId(R.id.menu_navigation_fridge);
+        mViewPager.setCurrentItem(R.id.menu_navigation_recipes);
+        navigation.setSelectedItemId(R.id.menu_navigation_recipes);
     }
 
     public void setActionBarTitle(String newTitle) {
@@ -100,10 +100,10 @@ public class MainActivity extends AppCompatActivity {
                 case 2:
                     return ShoppingListFragment.newInstance(0);
                 case 1:
-                    return FridgeFragment.newInstance(0);
+                    return RecipeListFragment.newInstance(0);
                 case 0:
                 default:
-                    return RecipeListFragment.newInstance(0);
+                    return FridgeFragment.newInstance(0);
             }
         }
 

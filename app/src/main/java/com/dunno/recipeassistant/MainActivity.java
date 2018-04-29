@@ -12,6 +12,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.ViewGroup;
@@ -32,8 +33,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Intent i = new Intent(this, RecipeActivity.class);// Used for testing. Will be removed when there is a way to open it with UI.
-        startActivityForResult(i, 1);
+        //Intent i = new Intent(this, RecipeActivity.class);// Used for testing. Will be removed when there is a way to open it with UI.
+        //startActivityForResult(i, 1);
 
         setupUI();
     }
@@ -46,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
         mTabPagerAdapter = new TabPagerAdapter(getSupportFragmentManager());
         // Set up the ViewPager with the sections adapter.
         mViewPager.setAdapter(mTabPagerAdapter);
+        mViewPager.setCurrentItem(R.id.menu_navigation_fridge);
         navigation.setSelectedItemId(R.id.menu_navigation_fridge);
     }
 
@@ -61,7 +63,20 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            mViewPager.setCurrentItem(item.getItemId());
+            int list = 0; //default to recipes
+            switch (item.getItemId()) {
+                case R.id.menu_navigation_shoppingList:
+                    list = 2;
+                    break;
+                case R.id.menu_navigation_recipes:
+                    list = 1;
+                    break;
+                case R.id.menu_navigation_fridge:
+                    list = 0;
+                    break;
+            }
+
+            mViewPager.setCurrentItem(list,true);
             setActionBarTitle(mViewPager.getAdapter().getPageTitle(item.getItemId()));
             return true;
         }
@@ -80,14 +95,15 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
+            Log.i(TAG, "Get the " +position + "th item!!!");
             switch (position) {
-                case R.id.menu_navigation_fridge:
+                case 2:
+                    return ShoppingListFragment.newInstance(0);
+                case 1:
                     return FridgeFragment.newInstance(0);
-                case R.id.menu_navigation_recipes:
+                case 0:
                 default:
                     return RecipeListFragment.newInstance(0);
-                case R.id.menu_navigation_shoppingList:
-                    return ShoppingListFragment.newInstance(0);
             }
         }
 

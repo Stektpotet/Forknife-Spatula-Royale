@@ -13,6 +13,7 @@ public class LockedViewPager extends ViewPager {
         super(context, attrs);
     }
 
+
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
         return false;

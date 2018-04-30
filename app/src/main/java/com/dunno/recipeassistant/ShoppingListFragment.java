@@ -1,11 +1,18 @@
 package com.dunno.recipeassistant;
 
+import android.content.ClipData;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,6 +53,9 @@ public class ShoppingListFragment extends Fragment {
         }
     }
 
+
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_shoppinglist, container, false);
@@ -69,13 +79,29 @@ public class ShoppingListFragment extends Fragment {
         mListAdapter = new IngredientListAdapter(mDataSet);
         mRecyclerView.setAdapter(mListAdapter);
 
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+               return false;
+            }
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
+                // Remove item from backing list here
+                mListAdapter.notifyDataSetChanged();
+            }
+
+        });
+
+        itemTouchHelper.attachToRecyclerView(mRecyclerView);
+
         return rootView;
     }
+
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         // Save currently selected layout manager.
         super.onSaveInstanceState(savedInstanceState);
     }
-
 
 }

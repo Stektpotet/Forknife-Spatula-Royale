@@ -1,6 +1,7 @@
 package com.dunno.recipeassistant;
 
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -12,15 +13,20 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.Set;
+
 public class FridgeFragment extends Fragment {
 
     public static final int DATASET_COUNT = 60;
 
+    public static final String PREF_SET_NAME = "FRIDGE_LIST";
+
+    protected TextView mEmptyListStatusText;
 
     protected RecyclerView.LayoutManager    mLayoutManager;
     protected IngredientListAdapter         mListAdapter;
     protected RecyclerView                  mRecyclerView;
-    protected String[]                      mDataSet;
+    protected String[]                      mDataSet = {};
     public FridgeFragment() {}
 
     public static FridgeFragment newInstance(int entry) {
@@ -40,9 +46,9 @@ public class FridgeFragment extends Fragment {
     }
 
     private void initDataset() {
-        mDataSet = new String[DATASET_COUNT];
-        for (int i = 0; i < DATASET_COUNT; i++) {
-            mDataSet[i] = "element #" + i;
+        Set<String> storedFridgeList =  PreferenceManager.getDefaultSharedPreferences(getActivity()).getStringSet(PREF_SET_NAME, null);
+        if(storedFridgeList != null) {
+            mDataSet = storedFridgeList.toArray(new String[storedFridgeList.size()]);
         }
     }
 
@@ -52,6 +58,10 @@ public class FridgeFragment extends Fragment {
         MainActivity activity = (MainActivity) getActivity();
 
         mRecyclerView = rootView.findViewById(R.id.fragment_fridgelist_recyclerView);
+        mEmptyListStatusText = rootView.findViewById(R.id.fragment_fridgelist_txt_empty);
+
+        mEmptyListStatusText.setVisibility((mDataSet.length > 0) ? View.GONE : View.VISIBLE);
+
         if(savedInstanceState != null) {
 
         }

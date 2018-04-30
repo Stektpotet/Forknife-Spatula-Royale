@@ -1,6 +1,7 @@
 package com.dunno.recipeassistant;
 
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -12,17 +13,22 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.Set;
+
 public class RecipeListFragment extends Fragment {
+
+    public static final String PREF_SET_NAME = "RECIPE_LIST";
 
 
     private static final int SPAN_COUNT = 2;
     private static final int DATASET_COUNT = 60;
     private static final String KEY_LAYOUT_MANAGER = "layoutManager";
 
+
     protected RecyclerView                  mRecyclerView;
     protected RecipeListAdapter             mListAdapter;
     protected RecyclerView.LayoutManager    mLayoutManager;
-    protected String[]                      mDataSet;
+    protected String[]                      mDataSet = {};
 
     private enum LayoutManagerType {
         GRID_LAYOUT_MANAGER,
@@ -50,8 +56,8 @@ public class RecipeListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_recipelist, container, false);
-
         mRecyclerView = rootView.findViewById(R.id.fragment_recipelist_recyclerView);
+
 
         // LinearLayoutManager is used here, this will layout the elements in a similar fashion
         // to the way ListView would layout elements. The RecyclerView.LayoutManager defines how
@@ -113,14 +119,11 @@ public class RecipeListFragment extends Fragment {
         super.onSaveInstanceState(savedInstanceState);
     }
 
-    /**
-     * Generates Strings for RecyclerView's adapter. This data would usually come
-     * from a local content provider or remote server.
-     */
     private void initDataset() {
-        mDataSet = new String[DATASET_COUNT];
-        for (int i = 0; i < DATASET_COUNT; i++) {
-            mDataSet[i] = "This is element #" + i;
+
+        Set<String> storedListSet =  PreferenceManager.getDefaultSharedPreferences(getActivity()).getStringSet(PREF_SET_NAME, null);
+        if(storedListSet != null) {
+            mDataSet = storedListSet.toArray(new String[storedListSet.size()]);
         }
     }
 

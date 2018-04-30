@@ -37,7 +37,6 @@ public class MainActivity extends AppCompatActivity {
     public static final String TAG = MainActivity.class.getName();
 
     private IngredientDbHelper ingredientsDbHelper;
-    public SQLiteDatabase ingredientsDb;
     private TabPagerAdapter mTabPagerAdapter;
     private ProgressBar     mProgressBar;
     private LockedViewPager mViewPager;
@@ -54,12 +53,8 @@ public class MainActivity extends AppCompatActivity {
 
         // Ingredients db setup:
         ingredientsDbHelper = new IngredientDbHelper(getApplicationContext());               // Instantiate the connection to local db.
-        ingredientsDb = ingredientsDbHelper.getWritableDatabase(); // Get instance of db.
 
-
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        sharedPreferences.edit().clear().commit(); // Clear SP for testing / debug. TODO remove when working.
-
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         if (!sharedPreferences.getString(getResources().getString(R.string.shared_preferences_version),  // Check if this is first time setup.
                 "NoFlag").equals(getResources().getString(R.string.shared_preferences_expected_version))) {
 
@@ -68,10 +63,16 @@ public class MainActivity extends AppCompatActivity {
             Log.d(TAG, "SP version: " +sharedPreferences.getString(getResources().getString(R.string.shared_preferences_version),  // Check if this is first time setup.
                     "NoFlag"));
 
-            firstTimeSetupIngredientsDb();
+            ingredientsDbHelper.firstTimeSetupIngredientsDb();
+            //TODO REMOVE -> this is just for testing purposes
+                SharedPreferences.Editor prefEditor = PreferenceManager.getDefaultSharedPreferences(this).edit();
+                Set<String> shoppingList = new HashSet<>();
+                shoppingList.addAll(Arrays.asList(getResources().getStringArray(R.array.ingredients)));
+                prefEditor.putStringSet(ShoppingListFragment.PREF_SET_NAME, shoppingList);
+                prefEditor.apply();
+            ///////
             // Set shared pref value to current version so next start don't do first time setup.
-            sharedPreferences.edit().putString(getResources().getString(R.string.shared_preferences_version), getResources().getString(R.string.shared_preferences_expected_version));
-            sharedPreferences.edit().apply();
+            sharedPreferences.edit().putString(getResources().getString(R.string.shared_preferences_version), getResources().getString(R.string.shared_preferences_expected_version)).apply();
         }
         else {
             Log.d(TAG, "Found 'first time set' flag in shared preferences.");
@@ -81,41 +82,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
         setupUI();
-    }
-
-    private void firstTimeSetupIngredientsDb() {        // Empties the ingredients db and refills it.
-
-        ingredientsDbHelper.onUpgrade(ingredientsDb, 0, 0);     // Clear out db.
-
-        // Put all ingredients into db:
-
-        //TypedArray ingredientsArray = getResources().obtainTypedArray(R.array.ingredients);
-        String[] ingredientsArray = getResources().getStringArray(R.array.ingredients);
-
-        //TODO REMOVE -> this is just for testing purposes
-            SharedPreferences.Editor prefEditor = PreferenceManager.getDefaultSharedPreferences(this).edit();
-            Set<String> shoppingList = new HashSet<>();
-            shoppingList.addAll(Arrays.asList(ingredientsArray));
-            prefEditor.putStringSet(ShoppingListFragment.PREF_SET_NAME, shoppingList);
-            prefEditor.apply();
-        ///////
-
-        for (int i = 0; i < ingredientsArray.length; i++) {
-            String ingredient = String.valueOf(ingredientsArray[i]);    // Ingredient to insert.
-
-            ContentValues values = new ContentValues();
-            values.put(IngredientDbHelper.IngredientEntry.COLUMN_NAME_NAME, ingredient);
-            long newRowId = ingredientsDb.insert(   IngredientDbHelper.IngredientEntry.TABLE_NAME,
-                    null,               // If no value in values, don't insert into db.
-                    values);
-            if (newRowId == -1) {                                                      // Debug message if failed.
-                Log.d(TAG, "Inserting  " + ingredient + "  into ingredients db failed.");
-            }
-            else {
-                Toast.makeText(getApplicationContext(), "Inserted " + ingredient + " into db.", Toast.LENGTH_LONG).show();
-                Log.d(TAG, "Inserted  " + ingredient + "  into db.");
-            }
-        }
     }
 
     private void setupUI() {

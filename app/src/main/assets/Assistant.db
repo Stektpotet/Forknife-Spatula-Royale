@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS `recipeContent`
 
 INSERT INTO ingredient (_ID, name) VALUES (1, "Eggs");
 INSERT INTO ingredient (_ID, name) VALUES (2, "Chicken ");
-INSERT INTO ingredient (_ID, name) VALUES (3, "Minced ");
+INSERT INTO ingredient (_ID, name) VALUES (3, "Minced Meat");
 INSERT INTO ingredient (_ID, name) VALUES (4, "Garlic");
 INSERT INTO ingredient (_ID, name) VALUES (5, "Onions");
 INSERT INTO ingredient (_ID, name) VALUES (6, "Corn");
@@ -46,4 +46,9 @@ INSERT INTO ingredient (_ID, name) VALUES (8, "Salt");
 INSERT INTO ingredient (_ID, name) VALUES (9, "Honey");
 
 INSERT INTO recipe (_ID, title, cookTime, description, instructions) VALUES (1, "Boiled egg", "5min", "Egg boiled in water.", "1. put egg in water in pot.\n\n2. boil water.\n\n3 Grab eg with bare hand.");
-INSERT INTO recipe (_ID, title, cookTime, description, instructions) VALUES (2, "Omlet", "8min", "Can't make an omlet without breaking a few eggs.", "1. Break a few eggs.\n\n2. Cut carrots and onions.\n\n3 Mix the eggs with vegetables.\n\n4. Cook blend in pan.");
+INSERT INTO recipe (_ID, title, cookTime, description, instructions) VALUES (2, "Omlet", "8min", "Can't make an omlet without breaking a few eggs.", "1. Break a few eggs.\n\n2. Cut garlic and onions.\n\n3 Mix the eggs with vegetables.\n\n4. Cook blend in pan.");
+
+INSERT INTO recipeContent (recipeId, ingredientId) VALUES (1, 1);
+INSERT INTO recipeContent (recipeId, ingredientId) VALUES (2, 1);
+INSERT INTO recipeContent (recipeId, ingredientId) VALUES (2, 4);
+INSERT INTO recipeContent (recipeId, ingredientId) VALUES (2, 5);

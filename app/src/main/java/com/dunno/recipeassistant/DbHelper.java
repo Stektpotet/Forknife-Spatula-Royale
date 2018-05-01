@@ -37,6 +37,9 @@ public class DbHelper extends SQLiteOpenHelper {
     public DbHelper(Context _context) {
         super(_context, DATABASE_NAME, null, DATABASE_VERSION);
         context = _context;
+    }
+
+    public void firstTimeSetup() {
 
         Log.d(TAG, "Attempting to read DB file: " + DATABASE_NAME);
         try {
@@ -57,7 +60,6 @@ public class DbHelper extends SQLiteOpenHelper {
             e.printStackTrace();
         }
     }
-
 
     public String convertStreamToString(InputStream is) throws Exception {
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));

@@ -1,6 +1,8 @@
 package com.dunno.recipeassistant;
 
 import android.content.SharedPreferences;
+import android.database.SQLException;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -13,11 +15,14 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ProgressBar;
 
+import java.io.IOException;
+
 public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = MainActivity.class.getName();
 
-    private DbHelper db;
+    private DbHelper dbHelper;
+    public  SQLiteDatabase db;
     private TabPagerAdapter mTabPagerAdapter;
     private ProgressBar     mProgressBar;
     private LockedViewPager mViewPager;
@@ -33,7 +38,8 @@ public class MainActivity extends AppCompatActivity {
         //startActivityForResult(i, 1);
 
         // Ingredients db setup:
-        db = new DbHelper(getApplicationContext());               // Instantiate the connection to local db.
+        dbHelper = new DbHelper(getApplicationContext());               // Instantiate the connection to local db.
+
 
 //        db.getIngredientslist(db.getWritableDatabase());
 

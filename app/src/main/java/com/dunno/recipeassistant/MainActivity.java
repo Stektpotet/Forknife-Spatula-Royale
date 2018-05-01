@@ -1,35 +1,23 @@
 package com.dunno.recipeassistant;
 
-import android.content.ContentValues;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
-import android.content.Intent;
-import android.content.res.TypedArray;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
-import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
-import android.view.ViewGroup;
 import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = MainActivity.class.getName();
 
-    private IngredientDbHelper ingredientsDbHelper;
+    private DbHelper db;
     private TabPagerAdapter mTabPagerAdapter;
     private ProgressBar     mProgressBar;
     private LockedViewPager mViewPager;
@@ -45,27 +33,31 @@ public class MainActivity extends AppCompatActivity {
         //startActivityForResult(i, 1);
 
         // Ingredients db setup:
-        ingredientsDbHelper = new IngredientDbHelper(getApplicationContext());               // Instantiate the connection to local db.
+        db = new DbHelper(getApplicationContext());               // Instantiate the connection to local db.
 
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        if (!sharedPreferences.getString(getResources().getString(R.string.shared_preferences_version),  // Check if this is first time setup.
-                "NoFlag").equals(getResources().getString(R.string.shared_preferences_expected_version))) {
+//        db.getIngredientslist(db.getWritableDatabase());
 
-            Log.d(TAG, "No 'first time set' flag found performing first time setup.");
-            Log.d(TAG, "strings version: " + getResources().getString(R.string.shared_preferences_expected_version));
-            Log.d(TAG, "SP version: " +sharedPreferences.getString(getResources().getString(R.string.shared_preferences_version),  // Check if this is first time setup.
-                    "NoFlag"));
-
-            ingredientsDbHelper.firstTimeSetupIngredientsDb();
-            // Set shared pref value to current version so next start don't do first time setup.
-            sharedPreferences.edit().putString(getResources().getString(R.string.shared_preferences_version), getResources().getString(R.string.shared_preferences_expected_version)).apply();
-        }
-        else {
-            Log.d(TAG, "Found 'first time set' flag in shared preferences.");
-            Log.d(TAG, "strings version: " + getResources().getString(R.string.shared_preferences_expected_version));
-            Log.d(TAG, "SP version: " +sharedPreferences.getString(getResources().getString(R.string.shared_preferences_version),  // Check if this is first time setup.
-                    "NoFlag"));
-        }
+//        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+//        if (!sharedPreferences.getString(getResources().getString(R.string.shared_preferences_version),  // Check if this is first time setup.
+//                "NoFlag").equals(getResources().getString(R.string.shared_preferences_expected_version))) {
+//
+//            Log.d(TAG, "No 'first time set' flag found performing first time setup.");
+//            Log.d(TAG, "strings version: " + getResources().getString(R.string.shared_preferences_expected_version));
+//            Log.d(TAG, "SP version: " +sharedPreferences.getString(getResources().getString(R.string.shared_preferences_version),  // Check if this is first time setup.
+//                    "NoFlag"));
+//
+//            // Set shared pref value to current version so next start don't do first time setup.
+//            sharedPreferences.edit().putString(getResources().getString(R.string.shared_preferences_version), getResources().getString(R.string.shared_preferences_expected_version)).apply();
+//        }
+//        else {
+//
+//
+//
+//            Log.d(TAG, "Found 'first time set' flag in shared preferences.");
+//            Log.d(TAG, "strings version: " + getResources().getString(R.string.shared_preferences_expected_version));
+//            Log.d(TAG, "SP version: " +sharedPreferences.getString(getResources().getString(R.string.shared_preferences_version),  // Check if this is first time setup.
+//                    "NoFlag"));
+//        }
 
         setupUI();
     }

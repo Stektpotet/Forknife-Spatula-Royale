@@ -52,5 +52,6 @@
         app:layout_constraintBottom_toTopOf="@+id/commit_button_done"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/commit_textView_ranOut" />
+        app:layout_constraintTop_toBottomOf="@+id/commit_textView_ranOut"
+        tools:listitem="@layout/shopping_ingredient_item" />
 </android.support.constraint.ConstraintLayout>

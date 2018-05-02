@@ -13,6 +13,7 @@ CREATE TABLE IF NOT EXISTS `recipe`
     cookTime        varchar(15),
     description     varchar(2000),
     instructions    varchar(5000),
+    image           varchar(250),
 
 	PRIMARY KEY (_ID)
 );
@@ -44,11 +45,28 @@ INSERT INTO ingredient (_ID, name) VALUES (6, "Corn");
 INSERT INTO ingredient (_ID, name) VALUES (7, "Asparagus");
 INSERT INTO ingredient (_ID, name) VALUES (8, "Salt");
 INSERT INTO ingredient (_ID, name) VALUES (9, "Honey");
+INSERT INTO ingredient (_ID, name) VALUES (10, "Pasta");
+INSERT INTO ingredient (_ID, name) VALUES (11, "Bacon");
+INSERT INTO ingredient (_ID, name) VALUES (12, "Parmesan");
+INSERT INTO ingredient (_ID, name) VALUES (13, "Milk");
 
-INSERT INTO recipe (_ID, title, cookTime, description, instructions) VALUES (1, "Boiled egg", "5min", "Egg boiled in water.", "1. put egg in water in pot.\n\n2. boil water.\n\n3 Grab eg with bare hand.");
-INSERT INTO recipe (_ID, title, cookTime, description, instructions) VALUES (2, "Omlet", "8min", "Can't make an omlet without breaking a few eggs.", "1. Break a few eggs.\n\n2. Cut garlic and onions.\n\n3 Mix the eggs with vegetables.\n\n4. Cook blend in pan.");
+
+
+
+
+
+INSERT INTO recipe (_ID, title, cookTime, description, instructions, image) VALUES (1, "Boiled egg", "5min", "Egg boiled in water.", "1. put egg in water in pot.\n\n2. boil water.\n\n3 Grab egg with bare hand.", "eggs");
+INSERT INTO recipe (_ID, title, cookTime, description, instructions, image) VALUES (2, "Omelete", "8min", "Can't make an omlet without breaking a few eggs.", "1. Break a few eggs.\n\n2. Cut garlic and onions.\n\n3 Mix the eggs with vegetables.\n\n4. Cook blend in pan.", "omelette");
+INSERT INTO recipe (_ID, title, cookTime, description, instructions, image) VALUES (3, "Pasta Carbonara", "20min", "Can't make an omlet without breaking a few eggs.", "1. \n\n1. Heat olive oil in a large skillet over medium heat, add guanciale (see Cook's Note). Cook, turning occasionally, until evenly browned and crispy, 5 to 10 minutes. Remove from heat and drain on paper towels.\n\n2. Bring a large pot of salted water to a boil. Cook spaghetti in the boiling water, stirring occasionally until tender yet firm to the bite, about 9 minutes. Drain and return to the pot. Let cool, stirring occasionally, about 5 minutes.\n\n3. Whisk eggs, 5 tablespoons pecorino Romano cheese, and some black pepper in a bowl until smooth and creamy. Pour egg mixture over pasta, stirring quickly, until creamy and slightly cooled. Stir in guanciale. Top with remaining 5 tablespoons pecorino Romano cheese and more ground black pepper.", "carbonara");
+
 
 INSERT INTO recipeContent (recipeId, ingredientId) VALUES (1, 1);
+
 INSERT INTO recipeContent (recipeId, ingredientId) VALUES (2, 1);
 INSERT INTO recipeContent (recipeId, ingredientId) VALUES (2, 4);
 INSERT INTO recipeContent (recipeId, ingredientId) VALUES (2, 5);
+
+INSERT INTO recipeContent (recipeId, ingredientId) VALUES (3, 1);
+INSERT INTO recipeContent (recipeId, ingredientId) VALUES (3, 10);
+INSERT INTO recipeContent (recipeId, ingredientId) VALUES (3, 11);
+INSERT INTO recipeContent (recipeId, ingredientId) VALUES (3, 12);

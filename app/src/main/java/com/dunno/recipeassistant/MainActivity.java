@@ -119,6 +119,13 @@ public class MainActivity extends AppCompatActivity {
     };
 
 
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+
+        updatePagerTabs();
+    }
+
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.

@@ -12,6 +12,7 @@ public class Recipe {
 
     public static class Entry implements BaseColumns {
         public static final String TABLE_NAME = "recipe";
+        public static final String COLUMN_NAME_ID = "_ID";
         public static final String COLUMN_NAME_Title = "title";
         public static final String COLUMN_NAME_Time = "cookTime";
         public static final String COLUMN_NAME_Description = "description";

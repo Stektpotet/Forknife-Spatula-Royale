@@ -33,18 +33,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/fragment_recipeDescription_textView_RecipeTime"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="20dp"
-                android:layout_marginTop="8dp"
-                android:text="@string/recipe_description_time"
-                android:textSize="18sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/fragment_recipeDescription_textView_RecipeTitle2" />
-
-            <TextView
-                android:id="@+id/fragment_recipeDescription_textView_RecipeTitle2"
+                android:id="@+id/fragment_recipeDescription_textView_RecipeTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -53,6 +42,28 @@
                 android:textSize="30sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/fragment_recipeDescription_image" />
+
+            <TextView
+                android:id="@+id/fragment_recipeDescription_textView_RecipeHas"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:text="@string/recipe_description_has"
+                android:textSize="18sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/fragment_recipeDescription_textView_RecipeTitle" />
+
+            <TextView
+                android:id="@+id/fragment_recipeDescription_textView_RecipeTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginTop="8dp"
+                android:text="@string/recipe_description_time"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/fragment_recipeDescription_textView_RecipeTitle" />
 
             <TextView
                 android:id="@+id/fragment_recipeDescription_textView_RecipeDescription"

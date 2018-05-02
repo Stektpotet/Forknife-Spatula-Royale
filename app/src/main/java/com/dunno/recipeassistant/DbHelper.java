@@ -1,9 +1,11 @@
 package com.dunno.recipeassistant;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import java.io.BufferedReader;
@@ -11,7 +13,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class DbHelper extends SQLiteOpenHelper {
 
@@ -156,7 +160,7 @@ public class DbHelper extends SQLiteOpenHelper {
         }
         cursor.close();
 
-        return items;
+        return updateAllHasValues(items);
     }
 
     public Recipe getRecipeById(int id) {   // Gets ingredients list from db, and sores it in shared preferences.
@@ -177,7 +181,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
 
         cursor.close();
-        return recipe;
+        return updateHasValue(recipe);
     }
 
     public List<Ingredient> getIngredientsInRecipe(int id) {   // Gets ingredients list from db, and sores it in shared preferences.
@@ -203,6 +207,34 @@ public class DbHelper extends SQLiteOpenHelper {
         cursor.close();
 
         return items;
+    }
+
+    public Recipe updateHasValue(Recipe recipe) {
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        Set<String> fridgeList = sharedPreferences.getStringSet(FridgeFragment.PREF_SET_NAME, new HashSet<String>());
+
+        float hasPercent = 0;
+
+        List<Ingredient> ingredientsList = getIngredientsInRecipe(recipe.id);
+        for (int j = 0; j < ingredientsList.size(); j++) {
+
+            if (fridgeList.contains(ingredientsList.get(j).name))       // If in fridge.
+            {
+                hasPercent += 1 / ingredientsList.size();
+            }
+        }
+        return recipe;
+    }
+
+    public List<Recipe> updateAllHasValues(List<Recipe> recipeList) {   // Updates all recipes 'has' values which indicates
+                                                                // how many of the required ingredients are in the fridge.
+        for (int i = 0; i < recipeList.size(); i++) {
+
+            recipeList.set(i, updateHasValue(recipeList.get(i)));
+        }
+
+        return recipeList;
     }
 
 

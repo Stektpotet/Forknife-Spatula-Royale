@@ -14,6 +14,7 @@
     <!-- Recipe Description -->
     <string name="recipe_description_fragment_name">Description</string>
     <string name="recipe_description_title">Coq au vin med hvitvin </string>
+    <string name="recipe_description_has">Has 58%</string>
     <string name="recipe_description_time">1h 15min</string>
     <string name="recipe_description_sample">
         Klassikeren Coq au vin er det mange som kjenner.

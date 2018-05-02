@@ -78,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
         Recipe recipe = dbHelper.getRecipeById(1);
         List<Ingredient> omletIngredients = dbHelper.getIngredientsInRecipe(2);
 
+        Recipe boiled = dbHelper.updateHasValue(recipes.get(0));
 
         setupUI();
     }

@@ -8,6 +8,7 @@ public class Recipe {
     public String time = "";
     public String description = "";
     public String instructions = "";
+    public float hasPercentage = 0;
 
 
     public static class Entry implements BaseColumns {

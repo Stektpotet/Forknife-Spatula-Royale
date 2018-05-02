@@ -37,7 +37,6 @@ public class IngredientSearchActivity extends AppCompatActivity {
     static final int REQUEST_PICK_INGREDIENT = 1;
 
     public static final String KEY_RETURNED_INGREDIENT = TAG + "ingredient_key";
-    IngredientTable ingredientDbHelper;
 
     ListView mSearchResultsListView;
     List<String> searchResult = new ArrayList<>();

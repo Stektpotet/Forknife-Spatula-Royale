@@ -16,13 +16,13 @@ import android.view.MenuItem;
 import android.widget.ProgressBar;
 
 import java.io.IOException;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = MainActivity.class.getName();
 
     private DbHelper dbHelper;
-    public  SQLiteDatabase db;
     private TabPagerAdapter mTabPagerAdapter;
     private ProgressBar     mProgressBar;
     private LockedViewPager mViewPager;
@@ -60,6 +60,8 @@ public class MainActivity extends AppCompatActivity {
             Log.d(TAG, "SP version: " +sharedPreferences.getString(getResources().getString(R.string.shared_preferences_version),  // Check if this is first time setup.
                     "NoFlag"));
         }
+
+        List<Ingredient> ingredients = dbHelper.getIngredientslist();
 
         setupUI();
     }

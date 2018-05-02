@@ -120,7 +120,13 @@ public class ShoppingListFragment extends Fragment {
 
 
         //HANDLE SWIPING OF ITEMS
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(
+                new ListItemSwipeHelper(
+                        0,
+                        ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT,
+                        new ListItemSwipeHelper.SwipeBackground("Add to Fridge", Color.GREEN),
+                        new ListItemSwipeHelper.SwipeBackground("Discard", Color.RED)
+                ) {
 
             @Override
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
@@ -131,11 +137,12 @@ public class ShoppingListFragment extends Fragment {
                 // Remove item from backing list here
                 mListAdapter.notifyDataSetChanged();
             }
-
         });
 
         itemTouchHelper.attachToRecyclerView(mRecyclerView);
     }
+
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -143,7 +150,7 @@ public class ShoppingListFragment extends Fragment {
         if(resultCode == Activity.RESULT_OK) {
             String ingredient = data.getStringExtra(IngredientSearchActivity.KEY_RETURNED_INGREDIENT);
             if( !AddItemToFridge(ingredient)) {
-                Toast.makeText(getContext(), ingredient + " was already added to your fridge", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), ingredient + " was already in your shopping list", Toast.LENGTH_SHORT).show();
             }
         }
     }

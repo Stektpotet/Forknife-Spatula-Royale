@@ -21,8 +21,8 @@ public class IngredientListAdapter extends RecyclerView.Adapter<IngredientListAd
 
         public ViewHolder(View itemView) {
             super(itemView);
-            imageView = itemView.findViewById(R.id.recipeList_item_image);
-            textView = itemView.findViewById(R.id.ingredient_item_title);
+            imageView = itemView.findViewById(R.id.shopping_ingredients_item_image);
+            textView = itemView.findViewById(R.id.shopping_ingredients_item_txt_title);
         }
     }
 

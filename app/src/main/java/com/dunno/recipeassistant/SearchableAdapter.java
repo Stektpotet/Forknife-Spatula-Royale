@@ -54,7 +54,7 @@ public class SearchableAdapter<T> extends BaseAdapter implements Filterable {
             // Creates a ViewHolder and store references to the two children views
             // we want to bind data to.
             holder = new ViewHolder();
-            holder.text = convertView.findViewById(R.id.search_ingredient_item_txt);
+            holder.text = convertView.findViewById(R.id.search_ingredient_item_txt_name);
 
             // Bind the data efficiently with the holder.
 

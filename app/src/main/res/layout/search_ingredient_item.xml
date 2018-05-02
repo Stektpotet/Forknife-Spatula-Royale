@@ -7,7 +7,7 @@
     android:background="?attr/actionModeSplitBackground">
 
     <TextView
-        android:id="@+id/search_ingredient_item_txt"
+        android:id="@+id/search_ingredient_item_txt_name"
         android:layout_width="0dp"
         android:layout_height="48dp"
         android:gravity="center_vertical|center_horizontal"

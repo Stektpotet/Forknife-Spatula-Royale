@@ -37,10 +37,10 @@ public class RecipeDescriptionFragment extends Fragment {
         mTextViewTime = rootView.findViewById(R.id.fragment_recipeDescription_textView_RecipeTime);
         mTextViewDescription = rootView.findViewById(R.id.fragment_recipeDescription_textView_RecipeDescription);
 
-        mTextViewTitle.setText(this.getArguments().getString("title").replaceAll("\\\\n", "\n"));
-        mTextViewTime.setText(this.getArguments().getString("time").replaceAll("\\\\n", "\n"));
-        mTextViewHas.setText("Has " + (int)(100 * this.getArguments().getFloat("has")) + " % of in fridge");
-        mTextViewDescription.setText(this.getArguments().getString("description").replaceAll("\\\\n", "\n"));
+        mTextViewTitle.setText(this.getArguments().getString(RecipeActivity.RECIPE_TITLE).replaceAll("\\\\n", "\n"));
+        mTextViewTime.setText(this.getArguments().getString(RecipeActivity.RECIPE_TIME).replaceAll("\\\\n", "\n"));
+        mTextViewHas.setText((int)(100 * this.getArguments().getFloat(RecipeActivity.RECIPE_HAS_PERCENTAGE)) + " % in fridge");
+        mTextViewDescription.setText(this.getArguments().getString(RecipeActivity.RECIPE_DESCRIPTION).replaceAll("\\\\n", "\n"));
 
         // Inflate the layout for this fragment
         return rootView;

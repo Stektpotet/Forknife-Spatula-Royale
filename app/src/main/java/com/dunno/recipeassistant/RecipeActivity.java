@@ -27,6 +27,14 @@ public class RecipeActivity extends AppCompatActivity {
     private DbHelper dbHelper;
     private Recipe recipe;
 
+    public static final String RECIPE_ID                = "id";
+    public static final String RECIPE_TITLE             = "title";
+    public static final String RECIPE_DESCRIPTION       = "description";
+    public static final String RECIPE_HAS_PERCENTAGE    = "has";
+    public static final String RECIPE_TIME              = "time";
+    public static final String RECIPE_INSTRUCTIONS      = "instructions";
+
+
     public class SimpleFragmentPagerAdapter extends FragmentPagerAdapter{
 
         final int PAGE_COUNT = 3;
@@ -53,6 +61,7 @@ public class RecipeActivity extends AppCompatActivity {
         public Fragment getItem(int position) {
 
             Bundle bundle = new Bundle();
+            bundle.putInt(RECIPE_ID, recipe.id);
             bundle.putString("title", recipe.title);
             bundle.putString("time", recipe.time);
             bundle.putFloat("has", recipe.hasPercentage);

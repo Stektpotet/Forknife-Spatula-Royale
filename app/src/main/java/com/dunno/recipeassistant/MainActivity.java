@@ -13,7 +13,9 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ProgressBar;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -25,7 +27,6 @@ public class MainActivity extends AppCompatActivity {
     private LockedViewPager mViewPager;
     private SharedPreferences sharedPreferences;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,7 +35,6 @@ public class MainActivity extends AppCompatActivity {
 
         // Ingredients db setup:
         dbHelper = new DbHelper(getApplicationContext());               // Instantiate the connection to local db.
-
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         if (!sharedPreferences.getString(getResources().getString(R.string.shared_preferences_version),  // Check if this is first time setup.
@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
 
             // Set shared pref value to current version so next start don't do first time setup.
             sharedPreferences.edit().putString(getResources().getString(R.string.shared_preferences_version), getResources().getString(R.string.shared_preferences_expected_version)).apply();
+
         }
         else {
 
@@ -59,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
                     "NoFlag"));
 
         }
+        
 
         List<Ingredient> ingredients = dbHelper.getIngredientslist();
         List<Recipe> recipes = dbHelper.getRecipelist();

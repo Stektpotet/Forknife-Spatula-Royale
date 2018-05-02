@@ -7,10 +7,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.dunno.recipeassistant.R;
-import com.dunno.recipeassistant.RecipeListFragment;
-import com.dunno.recipeassistant.ShoppingListFragment;
-
 import java.util.Set;
 
 public class IngredientListAdapter extends RecyclerView.Adapter<IngredientListAdapter.ViewHolder> {
@@ -25,7 +21,7 @@ public class IngredientListAdapter extends RecyclerView.Adapter<IngredientListAd
 
         public ViewHolder(View itemView) {
             super(itemView);
-            imageView = itemView.findViewById(R.id.ingredient_item_image);
+            imageView = itemView.findViewById(R.id.recipeList_item_image);
             textView = itemView.findViewById(R.id.ingredient_item_title);
         }
     }

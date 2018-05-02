@@ -1,7 +1,7 @@
 package com.dunno.recipeassistant;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.HashSet;
 import java.util.Set;
 
 public class RecipeListFragment extends Fragment {
@@ -23,12 +24,12 @@ public class RecipeListFragment extends Fragment {
     private static final int SPAN_COUNT = 2;
     private static final int DATASET_COUNT = 60;
     private static final String KEY_LAYOUT_MANAGER = "layoutManager";
-
+    private static DbHelper dbHelper;
 
     protected RecyclerView                  mRecyclerView;
     protected RecipeListAdapter             mListAdapter;
     protected RecyclerView.LayoutManager    mLayoutManager;
-    protected String[]                      mDataSet = {};
+    protected Set<Recipe>                   mDataSet = new HashSet<>();
 
     private enum LayoutManagerType {
         GRID_LAYOUT_MANAGER,
@@ -49,6 +50,8 @@ public class RecipeListFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        dbHelper = new DbHelper(getContext());
 
         initDataset();
     }
@@ -75,6 +78,27 @@ public class RecipeListFragment extends Fragment {
 
         // Set CustomAdapter as the adapter for RecyclerView.
         mRecyclerView.setAdapter(mListAdapter);
+
+
+        mRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener( getContext(),
+                                                                            mRecyclerView,
+                                                                            new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override public void onItemClick(View view, int position) {
+
+                        int recipeId = 1;   // Hardcoded to boiled egg.
+                                            // TODO implement method to get recipeId from recycleView based on position.
+
+                        Intent intent = new Intent(getContext(), RecipeActivity.class);
+                        intent.putExtra("recipeId", recipeId);
+                        startActivity(intent);
+                    }
+
+                    @Override public void onLongItemClick(View view, int position) {
+
+                    }
+                })
+        );
+
 
         return rootView;
     }
@@ -121,14 +145,11 @@ public class RecipeListFragment extends Fragment {
 
     private void initDataset() {
 
-        Set<String> storedListSet =  PreferenceManager.getDefaultSharedPreferences(getContext()).getStringSet(PREF_SET_NAME, null);
-        if(storedListSet != null) {
-            mDataSet = storedListSet.toArray(new String[storedListSet.size()]);
-        }
+        mDataSet = new HashSet<>(dbHelper.getRecipelist());
     }
 
     public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.ViewHolder> {
-        private String[] mDataSet;
+        private Recipe[] mDataSet;
 
         // Provide a reference to the views for each data item
         // Complex data items may need more than one view per item, and
@@ -139,14 +160,14 @@ public class RecipeListFragment extends Fragment {
 
             public ViewHolder(View itemView) {
                 super(itemView);
-                imageView = itemView.findViewById(R.id.ingredient_item_image);
+                imageView = itemView.findViewById(R.id.recipeList_item_image);
                 textView = itemView.findViewById(R.id.recipeList_item_title);
             }
         }
 
         // Provide a suitable constructor (depends on the kind of dataset)
-        public RecipeListAdapter(String[] dataSet) {
-            this.mDataSet = dataSet;
+        public RecipeListAdapter(Set<Recipe> dataSet) {
+            this.mDataSet = dataSet.toArray(new Recipe[dataSet.size()]);
         }
 
         // Create new views (invoked by the layout manager)
@@ -166,7 +187,7 @@ public class RecipeListFragment extends Fragment {
             // - get element from your dataset at this position
             // - replace the contents of the view with that element
 //            holder.itemView.setText(mDataSet[position]);
-            holder.textView.setText(this.mDataSet[position]);
+            holder.textView.setText(this.mDataSet[position].title);
         }
 
         @Override

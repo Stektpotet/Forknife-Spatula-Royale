@@ -12,6 +12,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,9 +20,12 @@ import android.widget.Button;
 
 public class RecipeActivity extends AppCompatActivity {
 
+    public static final String TAG = RecipeActivity.class.getName();
     private Button madeThisButton;
     private SimpleFragmentPagerAdapter mFragmentPagerAdapter;
     private ViewPager mViewPager;
+    private DbHelper dbHelper;
+    private Recipe recipe;
 
     public class SimpleFragmentPagerAdapter extends FragmentPagerAdapter{
 
@@ -35,6 +39,9 @@ public class RecipeActivity extends AppCompatActivity {
         public SimpleFragmentPagerAdapter(FragmentManager fm, Context context) {
             super(fm);
             this.context = context;
+
+
+
         }
 
         @Override
@@ -45,14 +52,28 @@ public class RecipeActivity extends AppCompatActivity {
         @Override
         public Fragment getItem(int position) {
 
+            Bundle bundle = new Bundle();
+            bundle.putString("title", recipe.title);
+            bundle.putString("time", recipe.time);
+            bundle.putString("description", recipe.description);
+            bundle.putString("instructions", recipe.instructions);
+
             if (position == 1) {
-                return RecipeIngredientsFragment.newInstance();
+
+                RecipeIngredientsFragment ingFrag = RecipeIngredientsFragment.newInstance();
+                ingFrag.setArguments(bundle);
+                return ingFrag;
             }
             else if (position == 2) {
-                return RecipeInstructionsFragment.newInstance();
+                RecipeInstructionsFragment instFrag = RecipeInstructionsFragment.newInstance();
+                instFrag.setArguments(bundle);
+                return instFrag;
             }
 
-            return RecipeDescriptionFragment.newInstance();
+            RecipeDescriptionFragment descFrag = RecipeDescriptionFragment.newInstance();
+            descFrag.setArguments(bundle);
+            return descFrag;
+
         }
 
         @Override
@@ -67,6 +88,9 @@ public class RecipeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe);
+
+        dbHelper = new DbHelper(getApplicationContext());
+
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         // Set up the ViewPager with the sections adapter.
@@ -82,6 +106,18 @@ public class RecipeActivity extends AppCompatActivity {
             }
         };
         madeThisButton.setOnClickListener(madeThisButtonListener);
+
+
+        Intent params = getIntent();
+        int id = params.getIntExtra("recipeId", -1);
+        if (id != -1) {
+           recipe = dbHelper.getRecipeById(id);
+        }
+        else {
+            Log.e(TAG, "Attempt to get recipe with id -1, that does not exist.");
+            recipe = new Recipe();
+            recipe.id = -1;
+        }
 
     }
 
@@ -107,5 +143,4 @@ public class RecipeActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
 }

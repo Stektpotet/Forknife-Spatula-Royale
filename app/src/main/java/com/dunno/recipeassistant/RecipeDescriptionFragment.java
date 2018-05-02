@@ -1,14 +1,16 @@
 package com.dunno.recipeassistant;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 public class RecipeDescriptionFragment extends Fragment {
+
+    private TextView mTextViewTitle;
+    private TextView mTextViewDescription;
 
     public RecipeDescriptionFragment() {
         // Required empty public constructor
@@ -22,12 +24,20 @@ public class RecipeDescriptionFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.fragment_recipe_description, container, false);
+        mTextViewTitle = rootView.findViewById(R.id.fragment_recipeDescription_textView_RecipeTitle);
+        mTextViewDescription = rootView.findViewById(R.id.fragment_recipeDescription_textView_RecipeDescription);
+
+        mTextViewTitle.setText(this.getArguments().getString("title").replaceAll("\\\\n", "\n"));
+        mTextViewDescription.setText(this.getArguments().getString("description").replaceAll("\\\\n", "\n"));
+
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_recipe_description, container, false);
+        return rootView;
     }
 }

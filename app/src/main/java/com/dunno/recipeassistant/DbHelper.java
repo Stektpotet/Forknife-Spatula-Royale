@@ -125,7 +125,13 @@ public class DbHelper extends SQLiteOpenHelper {
         return ingredient;
     }
 
+    public void removeIngredientWithId(int id) {   // Gets ingredients list from db, and sores it in shared preferences.
 
+        dataBase.rawQuery(  "delete from " + Ingredient.Entry.TABLE_NAME +
+                " where _ID = " + id,null);
+
+        Log.d(TAG, "Removed ingredient with id(" + id + "):");
+    }
 
     public List<Recipe> getRecipelist() {   // Gets ingredients list from db, and sores it in shared preferences.
 
@@ -197,6 +203,15 @@ public class DbHelper extends SQLiteOpenHelper {
         cursor.close();
 
         return items;
+    }
+
+
+    public void removeRecipeWithId(int id) {   // Gets ingredients list from db, and sores it in shared preferences.
+
+        dataBase.rawQuery("delete from " + Recipe.Entry.TABLE_NAME +
+                " where _ID = " + id,null);
+
+        Log.d(TAG, "Removed recipe with id(" + id + "):");
     }
 
 

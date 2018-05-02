@@ -23,6 +23,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.ListIterator;
 import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
@@ -75,6 +76,8 @@ public class MainActivity extends AppCompatActivity {
 
         Ingredient ingredient = dbHelper.getIngredientById(1);
         Recipe recipe = dbHelper.getRecipeById(1);
+        List<Ingredient> omletIngredients = dbHelper.getIngredientsInRecipe(2);
+
 
         setupUI();
     }

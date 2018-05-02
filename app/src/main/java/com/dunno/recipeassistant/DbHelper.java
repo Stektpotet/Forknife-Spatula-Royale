@@ -112,7 +112,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
         Cursor cursor = dataBase.rawQuery(  "select * from " + Ingredient.Entry.TABLE_NAME +
                                                 " where _ID IS " + id,null);
-        Log.d(TAG, "Get ingredient by id(" + id + ":");
+        Log.d(TAG, "Get ingredient by id(" + id + "):");
 
         cursor.moveToNext();
 
@@ -157,7 +157,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
         Cursor cursor = dataBase.rawQuery(  "select * from " + Recipe.Entry.TABLE_NAME +
                 " where _ID IS " + id,null);
-        Log.d(TAG, "Get recipe by id(" + id + ":");
+        Log.d(TAG, "Get recipe by id(" + id + "):");
 
         cursor.moveToNext();
         Recipe recipe = new Recipe();
@@ -172,6 +172,31 @@ public class DbHelper extends SQLiteOpenHelper {
 
         cursor.close();
         return recipe;
+    }
+
+    public List<Ingredient> getIngredientsInRecipe(int id) {   // Gets ingredients list from db, and sores it in shared preferences.
+
+        Cursor cursor = dataBase.rawQuery(  " select * from " + Ingredient.Entry.TABLE_NAME +
+                                                " where _ID = (" +
+                                                    " select " +RecipeContent.COLUMN_NAME_IngredientID +
+                                                    " from " +  RecipeContent.TABLE_NAME +
+                                                    " where " + RecipeContent.COLUMN_NAME_RecipeID + " = " + id + ")"
+                                                ,null);
+
+        Log.d(TAG, "Get ingredient in recipe(" + id + "):");
+
+        List items = new ArrayList<Ingredient>();
+        while(cursor.moveToNext()) {
+
+            Ingredient ingredient = new Ingredient();
+            ingredient.id = cursor.getInt(cursor.getColumnIndex(Ingredient.Entry.COLUMN_NAME_ID));
+            ingredient.name = cursor.getString(cursor.getColumnIndex(Ingredient.Entry.COLUMN_NAME_NAME));
+            items.add(ingredient);
+            Log.d(TAG, "\tAdding  " + ingredient.name);
+        }
+        cursor.close();
+
+        return items;
     }
 
 

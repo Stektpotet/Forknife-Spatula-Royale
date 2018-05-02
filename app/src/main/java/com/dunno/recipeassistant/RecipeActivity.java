@@ -55,6 +55,7 @@ public class RecipeActivity extends AppCompatActivity {
             Bundle bundle = new Bundle();
             bundle.putString("title", recipe.title);
             bundle.putString("time", recipe.time);
+            bundle.putFloat("has", recipe.hasPercentage);
             bundle.putString("description", recipe.description);
             bundle.putString("instructions", recipe.instructions);
 

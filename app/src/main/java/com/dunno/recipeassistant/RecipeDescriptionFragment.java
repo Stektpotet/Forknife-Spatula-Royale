@@ -39,6 +39,7 @@ public class RecipeDescriptionFragment extends Fragment {
 
         mTextViewTitle.setText(this.getArguments().getString("title").replaceAll("\\\\n", "\n"));
         mTextViewTime.setText(this.getArguments().getString("time").replaceAll("\\\\n", "\n"));
+        mTextViewHas.setText("Has " + (int)(100 * this.getArguments().getFloat("has")) + " % of in fridge");
         mTextViewDescription.setText(this.getArguments().getString("description").replaceAll("\\\\n", "\n"));
 
         // Inflate the layout for this fragment

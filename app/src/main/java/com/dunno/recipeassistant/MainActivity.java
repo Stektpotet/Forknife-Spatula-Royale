@@ -60,7 +60,6 @@ public class MainActivity extends AppCompatActivity {
                     "NoFlag"));
 
         }
-        
 
         List<Ingredient> ingredients = dbHelper.getIngredientslist();
         List<Recipe> recipes = dbHelper.getRecipelist();
@@ -68,9 +67,6 @@ public class MainActivity extends AppCompatActivity {
         Ingredient ingredient = dbHelper.getIngredientById(1);
         Recipe recipe = dbHelper.getRecipeById(1);
         List<Ingredient> omletIngredients = dbHelper.getIngredientsInRecipe(2);
-
-        Recipe boiled = dbHelper.updateHasValue(recipes.get(0));
-
 
         setupUI();
     }

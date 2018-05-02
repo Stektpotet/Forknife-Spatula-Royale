@@ -214,16 +214,17 @@ public class DbHelper extends SQLiteOpenHelper {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         Set<String> fridgeList = sharedPreferences.getStringSet(FridgeFragment.PREF_SET_NAME, new HashSet<String>());
 
-        float hasPercent = 0;
+        float hasPercentage = 0;
 
         List<Ingredient> ingredientsList = getIngredientsInRecipe(recipe.id);
         for (int j = 0; j < ingredientsList.size(); j++) {
 
             if (fridgeList.contains(ingredientsList.get(j).name))       // If in fridge.
             {
-                hasPercent += 1 / ingredientsList.size();
+                hasPercentage += 1 / ingredientsList.size();
             }
         }
+        recipe.hasPercentage = hasPercentage;
         return recipe;
     }
 

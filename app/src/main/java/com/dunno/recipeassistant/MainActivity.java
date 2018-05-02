@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -17,6 +18,12 @@ import android.widget.ProgressBar;
 
 import java.io.IOException;
 import java.util.List;
+
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -33,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         // Ingredients db setup:
         dbHelper = new DbHelper(getApplicationContext());               // Instantiate the connection to local db.
@@ -65,7 +73,6 @@ public class MainActivity extends AppCompatActivity {
 
         setupUI();
     }
-
 
     private void setupUI() {
 

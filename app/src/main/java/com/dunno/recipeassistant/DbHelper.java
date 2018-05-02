@@ -223,7 +223,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
             if (fridgeList.contains(ingredientsList.get(j).name))       // If in fridge.
             {
-                hasPercentage += 1 / ingredientsList.size();
+                hasPercentage += 1.0f / (float)ingredientsList.size();
             }
         }
         recipe.hasPercentage = hasPercentage;

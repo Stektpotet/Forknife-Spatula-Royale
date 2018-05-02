@@ -93,6 +93,17 @@ public class RecipeActivity extends AppCompatActivity {
 
         dbHelper = new DbHelper(getApplicationContext());
 
+        Intent params = getIntent();
+        int id = params.getIntExtra("recipeId", -1);
+        if (id != -1) {
+            recipe = dbHelper.getRecipeById(id);
+        }
+        else {
+            Log.e(TAG, "Attempt to get recipe with id -1, that does not exist.");
+            recipe = new Recipe();
+            recipe.id = -1;
+        }
+
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         // Set up the ViewPager with the sections adapter.
@@ -104,22 +115,11 @@ public class RecipeActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(getApplicationContext(), CommitRecipeActivity.class);// Used for testing. Will be removed when there is a way to open it with UI.
+                i.putExtra("recipeId", recipe.id);
                 startActivityForResult(i, 1);
             }
         };
         madeThisButton.setOnClickListener(madeThisButtonListener);
-
-
-        Intent params = getIntent();
-        int id = params.getIntExtra("recipeId", -1);
-        if (id != -1) {
-           recipe = dbHelper.getRecipeById(id);
-        }
-        else {
-            Log.e(TAG, "Attempt to get recipe with id -1, that does not exist.");
-            recipe = new Recipe();
-            recipe.id = -1;
-        }
 
     }
 

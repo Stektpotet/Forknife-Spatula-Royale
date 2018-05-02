@@ -61,7 +61,6 @@ public class RecipeListFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_recipelist, container, false);
         mRecyclerView = rootView.findViewById(R.id.fragment_recipelist_recyclerView);
 
-
         // LinearLayoutManager is used here, this will layout the elements in a similar fashion
         // to the way ListView would layout elements. The RecyclerView.LayoutManager defines how
         // elements are laid out.
@@ -79,17 +78,13 @@ public class RecipeListFragment extends Fragment {
         // Set CustomAdapter as the adapter for RecyclerView.
         mRecyclerView.setAdapter(mListAdapter);
 
-
         mRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener( getContext(),
                                                                             mRecyclerView,
                                                                             new RecyclerItemClickListener.OnItemClickListener() {
                     @Override public void onItemClick(View view, int position) {
 
-                        int recipeId = 1;   // Hardcoded to boiled egg.
-                                            // TODO implement method to get recipeId from recycleView based on position.
-
                         Intent intent = new Intent(getContext(), RecipeActivity.class);
-                        intent.putExtra("recipeId", recipeId);
+                        intent.putExtra("recipeId", mListAdapter.getItemAt(position));
                         startActivity(intent);
                     }
 
@@ -163,6 +158,7 @@ public class RecipeListFragment extends Fragment {
                 imageView = itemView.findViewById(R.id.recipeList_item_image);
                 textView = itemView.findViewById(R.id.recipeList_item_title);
             }
+
         }
 
         // Provide a suitable constructor (depends on the kind of dataset)
@@ -196,6 +192,11 @@ public class RecipeListFragment extends Fragment {
         @Override
         public int getItemCount() {
             return this.mDataSet.length;
+        }
+
+
+        public int getItemAt(int position) {
+            return mDataSet[position].id;
         }
 
     }

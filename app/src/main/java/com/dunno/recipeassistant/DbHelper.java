@@ -154,6 +154,7 @@ public class DbHelper extends SQLiteOpenHelper {
             recipe.time = cursor.getString(cursor.getColumnIndex(Recipe.Entry.COLUMN_NAME_Time));
             recipe.description = cursor.getString(cursor.getColumnIndex(Recipe.Entry.COLUMN_NAME_Description));
             recipe.instructions = cursor.getString(cursor.getColumnIndex(Recipe.Entry.COLUMN_NAME_Instructions));
+            recipe.image = cursor.getString(cursor.getColumnIndex(Recipe.Entry.COLUMN_NAME_Image));
 
             items.add(recipe);
             Log.d(TAG, "\tAdding  " + recipe.title);
@@ -176,6 +177,7 @@ public class DbHelper extends SQLiteOpenHelper {
         recipe.time = cursor.getString(cursor.getColumnIndex(Recipe.Entry.COLUMN_NAME_Time));
         recipe.description = cursor.getString(cursor.getColumnIndex(Recipe.Entry.COLUMN_NAME_Description));
         recipe.instructions = cursor.getString(cursor.getColumnIndex(Recipe.Entry.COLUMN_NAME_Instructions));
+        recipe.image = cursor.getString(cursor.getColumnIndex(Recipe.Entry.COLUMN_NAME_Image));
 
         Log.d(TAG, "\tGetting " + recipe.title);
 

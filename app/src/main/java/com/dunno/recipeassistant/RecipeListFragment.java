@@ -188,6 +188,9 @@ public class RecipeListFragment extends Fragment {
             // - replace the contents of the view with that element
 //            holder.itemView.setText(mDataSet[position]);
             holder.textView.setText(this.mDataSet[position].title);
+            int resID = getResources().getIdentifier(this.mDataSet[position].image,
+                                                "drawable", "com.dunno.recipeassistant");
+            holder.imageView.setImageResource(resID);
         }
 
         @Override

@@ -58,6 +58,7 @@ public class RecipeActivity extends AppCompatActivity {
             bundle.putFloat("has", recipe.hasPercentage);
             bundle.putString("description", recipe.description);
             bundle.putString("instructions", recipe.instructions);
+            bundle.putString("image", recipe.image);
 
             if (position == 1) {
 

@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class RecipeDescriptionFragment extends Fragment {
@@ -13,6 +14,7 @@ public class RecipeDescriptionFragment extends Fragment {
     private TextView mTextViewHas;
     private TextView mTextViewTime;
     private TextView mTextViewDescription;
+    private ImageView mImageView;
 
     public RecipeDescriptionFragment() {
         // Required empty public constructor
@@ -36,11 +38,16 @@ public class RecipeDescriptionFragment extends Fragment {
         mTextViewHas = rootView.findViewById(R.id.fragment_recipeDescription_textView_RecipeHas);
         mTextViewTime = rootView.findViewById(R.id.fragment_recipeDescription_textView_RecipeTime);
         mTextViewDescription = rootView.findViewById(R.id.fragment_recipeDescription_textView_RecipeDescription);
+        mImageView = rootView.findViewById(R.id.fragment_recipeDescription_image);
+
 
         mTextViewTitle.setText(this.getArguments().getString("title").replaceAll("\\\\n", "\n"));
         mTextViewTime.setText(this.getArguments().getString("time").replaceAll("\\\\n", "\n"));
-        mTextViewHas.setText("Has " + (int)(100 * this.getArguments().getFloat("has")) + " % of in fridge");
+        mTextViewHas.setText((int)(100 * this.getArguments().getFloat("has")) + " % in fridge");
         mTextViewDescription.setText(this.getArguments().getString("description").replaceAll("\\\\n", "\n"));
+
+        int resID = getResources().getIdentifier(this.getArguments().getString("image"), "drawable", "com.dunno.recipeassistant");
+        mImageView.setImageResource(resID);
 
         // Inflate the layout for this fragment
         return rootView;

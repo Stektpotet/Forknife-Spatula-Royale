@@ -1,7 +1,10 @@
 package com.dunno.recipeassistant;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -15,7 +18,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import junit.framework.Assert;
+
+import java.util.HashSet;
 import java.util.Set;
 
 public class FridgeFragment extends Fragment {
@@ -30,7 +37,7 @@ public class FridgeFragment extends Fragment {
     protected RecyclerView.LayoutManager    mLayoutManager;
     protected IngredientListAdapter         mListAdapter;
     protected RecyclerView                  mRecyclerView;
-    protected String[]                      mDataSet = {};
+    protected Set<String>                   mDataSet = new HashSet<>();
     public FridgeFragment() {}
 
     public static FridgeFragment newInstance(int entry) {
@@ -44,16 +51,8 @@ public class FridgeFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //FETCH dataset FROM SQLite
-        //for now - init with some placeholder data:
-        initDataset();
-    }
-
-    private void initDataset() {
-        Set<String> storedFridgeList =  PreferenceManager.getDefaultSharedPreferences(getActivity()).getStringSet(PREF_SET_NAME, null);
-        if(storedFridgeList != null) {
-            mDataSet = storedFridgeList.toArray(new String[storedFridgeList.size()]);
-        }
+       
+       
     }
 
     protected FloatingActionButton  mAddIngredientButton;
@@ -63,12 +62,19 @@ public class FridgeFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_fridgelist, container, false);
         MainActivity activity = (MainActivity) getActivity();
 
-        setupUI(rootView);
 
         if(savedInstanceState != null) {
 
         }
 
+
+        setupUI(rootView);
+
+        return rootView;
+    }
+
+    private void setupUI(View rootView) {
+        mRecyclerView = rootView.findViewById(R.id.fragment_fridgelist_recyclerView);
         int scrollPosition = 0;
         mLayoutManager = new LinearLayoutManager(getActivity());
         // If a layout manager has already been set, get current scroll position.
@@ -79,14 +85,14 @@ public class FridgeFragment extends Fragment {
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.scrollToPosition(scrollPosition);
 
+        mDataSet = PreferenceManager.getDefaultSharedPreferences(getActivity()).getStringSet(PREF_SET_NAME, new HashSet<String>());
+
         mListAdapter = new IngredientListAdapter(mDataSet);
         mRecyclerView.setAdapter(mListAdapter);
 
-        return rootView;
-    }
 
-    private void setupUI(View rootView) {
-        mRecyclerView = rootView.findViewById(R.id.fragment_fridgelist_recyclerView);
+        mEmptyListStatusText = rootView.findViewById(R.id.fragment_fridgelist_txt_empty);
+        mEmptyListStatusText.setVisibility((mDataSet.size() > 0) ? View.GONE : View.VISIBLE);
 
         mAddIngredientButton = rootView.findViewById(R.id.fragment_fridgelist_btn_add);
         mAddIngredientButton.setOnClickListener(new View.OnClickListener() {
@@ -96,20 +102,37 @@ public class FridgeFragment extends Fragment {
                 startActivityForResult(searchIntent, IngredientSearchActivity.REQUEST_PICK_INGREDIENT);
             }
         });
-
-        mEmptyListStatusText = rootView.findViewById(R.id.fragment_fridgelist_txt_empty);
-        mEmptyListStatusText.setVisibility((mDataSet.length > 0) ? View.GONE : View.VISIBLE);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.i(TAG, "SearchActivity returned!\nrequest: " + requestCode + ",\nresult: " + resultCode);
+        if(resultCode == Activity.RESULT_OK) {
+            String ingredient = data.getStringExtra(IngredientSearchActivity.KEY_RETURNED_INGREDIENT);
+            if( !AddItemToFridge(ingredient)) {
+                Toast.makeText(getContext(), ingredient + " was already added to your fridge", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
+
+    //returns false if already existing
+    boolean AddItemToFridge(String newIngredient) {
+        boolean added;
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        SharedPreferences.Editor editor = prefs.edit();
+        mDataSet = prefs.getStringSet(PREF_SET_NAME, mDataSet);
+        added = mDataSet.add(newIngredient);
+        editor.remove(PREF_SET_NAME).apply();
+        editor = prefs.edit();
+        editor.putStringSet(PREF_SET_NAME, mDataSet);
+        editor.apply();
+        mListAdapter.updateDataSet(mDataSet);
+        return added;
+    }
+
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
-        // Save currently selected layout manager.
         super.onSaveInstanceState(savedInstanceState);
     }
 

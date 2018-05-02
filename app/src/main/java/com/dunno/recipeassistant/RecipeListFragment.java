@@ -121,7 +121,7 @@ public class RecipeListFragment extends Fragment {
 
     private void initDataset() {
 
-        Set<String> storedListSet =  PreferenceManager.getDefaultSharedPreferences(getActivity()).getStringSet(PREF_SET_NAME, null);
+        Set<String> storedListSet =  PreferenceManager.getDefaultSharedPreferences(getContext()).getStringSet(PREF_SET_NAME, null);
         if(storedListSet != null) {
             mDataSet = storedListSet.toArray(new String[storedListSet.size()]);
         }

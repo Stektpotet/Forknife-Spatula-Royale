@@ -64,13 +64,7 @@ public class MainActivity extends AppCompatActivity {
                     "NoFlag"));
 
             ingredientsDbHelper.firstTimeSetupIngredientsDb();
-            //TODO REMOVE -> this is just for testing purposes
-                SharedPreferences.Editor prefEditor = PreferenceManager.getDefaultSharedPreferences(this).edit();
-                Set<String> shoppingList = new HashSet<>();
-                shoppingList.addAll(Arrays.asList(getResources().getStringArray(R.array.ingredients)));
-                prefEditor.putStringSet(ShoppingListFragment.PREF_SET_NAME, shoppingList);
-                prefEditor.apply();
-            ///////
+
             // Set shared pref value to current version so next start don't do first time setup.
             sharedPreferences.edit().putString(getResources().getString(R.string.shared_preferences_version), getResources().getString(R.string.shared_preferences_expected_version)).apply();
         }

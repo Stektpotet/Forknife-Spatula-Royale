@@ -67,11 +67,14 @@ public class MainActivity extends AppCompatActivity {
             Log.d(TAG, "strings version: " + getResources().getString(R.string.shared_preferences_expected_version));
             Log.d(TAG, "SP version: " +sharedPreferences.getString(getResources().getString(R.string.shared_preferences_version),  // Check if this is first time setup.
                     "NoFlag"));
-            
+
         }
 
         List<Ingredient> ingredients = dbHelper.getIngredientslist();
         List<Recipe> recipes = dbHelper.getRecipelist();
+
+        Ingredient ingredient = dbHelper.getIngredientById(1);
+        Recipe recipe = dbHelper.getRecipeById(1);
 
         setupUI();
     }

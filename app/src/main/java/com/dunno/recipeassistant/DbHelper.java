@@ -90,8 +90,6 @@ public class DbHelper extends SQLiteOpenHelper {
 
     public List<Ingredient> getIngredientslist() {   // Gets ingredients list from db, and sores it in shared preferences.
 
-        // Define a projection that specifies which columns from the database
-        // you will actually use after this query.
         Cursor cursor = dataBase.rawQuery("select * from " + Ingredient.Entry.TABLE_NAME,null);
 
         Log.d(TAG, "Get ingredientsList:");
@@ -109,6 +107,25 @@ public class DbHelper extends SQLiteOpenHelper {
 
         return items;
     }
+
+    public Ingredient getIngredientById(int id) {   // Gets ingredients list from db, and sores it in shared preferences.
+
+        Cursor cursor = dataBase.rawQuery(  "select * from " + Ingredient.Entry.TABLE_NAME +
+                                                " where _ID IS " + id,null);
+        Log.d(TAG, "Get ingredient by id(" + id + ":");
+
+        cursor.moveToNext();
+
+        Ingredient ingredient = new Ingredient();
+        ingredient.id = cursor.getInt(cursor.getColumnIndex(Ingredient.Entry.COLUMN_NAME_ID));
+        ingredient.name = cursor.getString(cursor.getColumnIndex(Ingredient.Entry.COLUMN_NAME_NAME));
+        Log.d(TAG, "\tGetting  " + ingredient.name);
+
+        cursor.close();
+        return ingredient;
+    }
+
+
 
     public List<Recipe> getRecipelist() {   // Gets ingredients list from db, and sores it in shared preferences.
 
@@ -135,6 +152,29 @@ public class DbHelper extends SQLiteOpenHelper {
 
         return items;
     }
+
+    public Recipe getRecipeById(int id) {   // Gets ingredients list from db, and sores it in shared preferences.
+
+        Cursor cursor = dataBase.rawQuery(  "select * from " + Recipe.Entry.TABLE_NAME +
+                " where _ID IS " + id,null);
+        Log.d(TAG, "Get recipe by id(" + id + ":");
+
+        cursor.moveToNext();
+        Recipe recipe = new Recipe();
+        recipe.id = cursor.getInt(cursor.getColumnIndex(Recipe.Entry.COLUMN_NAME_ID));
+        recipe.title = cursor.getString(cursor.getColumnIndex(Recipe.Entry.COLUMN_NAME_Title));
+        recipe.time = cursor.getString(cursor.getColumnIndex(Recipe.Entry.COLUMN_NAME_Time));
+        recipe.description = cursor.getString(cursor.getColumnIndex(Recipe.Entry.COLUMN_NAME_Description));
+        recipe.instructions = cursor.getString(cursor.getColumnIndex(Recipe.Entry.COLUMN_NAME_Instructions));
+
+        Log.d(TAG, "\tGetting " + recipe.title);
+
+
+        cursor.close();
+        return recipe;
+    }
+
+
 
 
 }

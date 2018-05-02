@@ -11,6 +11,8 @@ import com.dunno.recipeassistant.R;
 import com.dunno.recipeassistant.RecipeListFragment;
 import com.dunno.recipeassistant.ShoppingListFragment;
 
+import java.util.Set;
+
 public class IngredientListAdapter extends RecyclerView.Adapter<IngredientListAdapter.ViewHolder> {
     private String[] mDataSet;
 
@@ -29,8 +31,13 @@ public class IngredientListAdapter extends RecyclerView.Adapter<IngredientListAd
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public IngredientListAdapter(String[] dataSet) {
-        this.mDataSet = dataSet;
+    public IngredientListAdapter(Set<String> dataSet) {
+        updateDataSet(dataSet);
+    }
+
+    public void updateDataSet(Set<String> dataSet) {
+        this.mDataSet = dataSet.toArray(new String[dataSet.size()]);
+        notifyDataSetChanged();
     }
 
     // Create new views (invoked by the layout manager)

@@ -10,9 +10,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 
-/**
- * Created by halvor on 02.05.18.
- */
 
 public class ListItemSwipeHelper extends ItemTouchHelper.SimpleCallback {
 
@@ -47,7 +44,7 @@ public class ListItemSwipeHelper extends ItemTouchHelper.SimpleCallback {
             if(dX > 0) {
                 c.drawText(text, area.left+dX-textWidth-48f, area.centerY() + (TEXT_SIZE/2), textPainter);
             } else {
-                c.drawText(text, area.right+dX+48f, area.centerY() + (TEXT_SIZE/2), textPainter);
+                c.drawText(text, area.right + dX + 48f, area.centerY() + (TEXT_SIZE/2), textPainter);
             }
         }
     }
@@ -69,7 +66,9 @@ public class ListItemSwipeHelper extends ItemTouchHelper.SimpleCallback {
 
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
-        // Remove item from backing list here
+        // Reset style for the item to come here
+        viewHolder.itemView.setAlpha(1);
+        viewHolder.itemView.setTranslationX(0);
     }
 
     @Override

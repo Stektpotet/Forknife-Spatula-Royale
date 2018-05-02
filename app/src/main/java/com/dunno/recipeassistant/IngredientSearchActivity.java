@@ -38,23 +38,18 @@ public class IngredientSearchActivity extends AppCompatActivity {
 
     public static final String KEY_RETURNED_INGREDIENT = TAG + "ingredient_key";
 
+    private static DbHelper dbHelper;
+
     ListView mSearchResultsListView;
-    List<String> searchResult = new ArrayList<>();
-    SearchableAdapter mSearchableAdapter;
+    List<Ingredient> searchResult = new ArrayList<>();
+    SearchableAdapter<Ingredient> mSearchableAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ingredient_search);
-
-        searchResult.add("Egg");
-        searchResult.add("Duck");
-        searchResult.add("Banana");
-        searchResult.add("Milk");
-        searchResult.add("Bacon");
-        searchResult.add("Cheese");
-        searchResult.add("Tomatoes");
-        searchResult.add("Potatoes");
+        dbHelper = new DbHelper(this);
+        searchResult.addAll(dbHelper.getIngredientslist());
 
         setupUI();
         openOptionsMenu();
@@ -68,14 +63,14 @@ public class IngredientSearchActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
         mSearchResultsListView = findViewById(R.id.activity_ingredient_search_list);
-        mSearchableAdapter = new SearchableAdapter(this, searchResult);
+        mSearchableAdapter = new SearchableAdapter<>(this, searchResult);
         mSearchResultsListView.setAdapter(mSearchableAdapter);
         mSearchResultsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent resultIntent = new Intent();
-                resultIntent.putExtra(KEY_RETURNED_INGREDIENT, (String) mSearchableAdapter.getItem(i));
+                resultIntent.putExtra(KEY_RETURNED_INGREDIENT, mSearchableAdapter.getItem(i).name);
                 setResult(RESULT_OK, resultIntent);
                 finish();
             }

@@ -48,8 +48,11 @@ public class IngredientListAdapter extends RecyclerView.Adapter<IngredientListAd
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-
         holder.textView.setText(this.mDataSet[position]);
+    }
+
+    public String getItemAt(int position) {
+        return this.mDataSet[position];
     }
 
     @Override

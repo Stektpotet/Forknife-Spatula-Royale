@@ -1,39 +1,28 @@
 package com.dunno.recipeassistant;
 
 import android.app.Activity;
-import android.content.ClipData;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Shader;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.HashSet;
 import java.util.Set;
-
-import static android.preference.PreferenceManager.getDefaultSharedPreferences;
 
 public class ShoppingListFragment extends Fragment {
 
@@ -56,8 +45,21 @@ public class ShoppingListFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // TODO Add your menu entries here
         mMenuItemClearAll = menu.add("Discard All");
+        MenuItem mMenuClearPrefs = menu.add("Clear Prefs");
+        mMenuClearPrefs.setEnabled(true);
         mMenuItemClearAll.setEnabled(mDataSet.size() > 0);
         super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getTitle().equals("Discard All")) {
+
+        }
+        if (item.getTitle().equals("Clear Prefs")) {
+            PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().clear().apply();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     public static ShoppingListFragment newInstance(int entry) {
@@ -135,7 +137,13 @@ public class ShoppingListFragment extends Fragment {
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
                 // Remove item from backing list here
-                mListAdapter.notifyDataSetChanged();
+                String item = mListAdapter.getItemAt(viewHolder.getAdapterPosition());
+                if(swipeDir == ItemTouchHelper.LEFT) {
+                    MoveToFridge(item);
+                } else { //ItemTouchHelper.RIGHT
+                    RemoveFromShoppingList(item);
+                }
+                super.onSwiped(viewHolder, swipeDir);
             }
         });
 
@@ -149,14 +157,14 @@ public class ShoppingListFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode == Activity.RESULT_OK) {
             String ingredient = data.getStringExtra(IngredientSearchActivity.KEY_RETURNED_INGREDIENT);
-            if( !AddItemToFridge(ingredient)) {
+            if( !AddItemToShoppingList(ingredient)) {
                 Toast.makeText(getContext(), ingredient + " was already in your shopping list", Toast.LENGTH_SHORT).show();
             }
         }
     }
 
     //returns false if already existing
-    boolean AddItemToFridge(String newIngredient) {
+    boolean AddItemToShoppingList(String newIngredient) {
         boolean added;
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         SharedPreferences.Editor editor = prefs.edit();
@@ -170,11 +178,44 @@ public class ShoppingListFragment extends Fragment {
         return added;
     }
 
+    //returns false if already existing
+    boolean MoveToFridge(String item) {
+        boolean added;
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        SharedPreferences.Editor editor = prefs.edit();
+        Set<String> FridgeDataSet = prefs.getStringSet(FridgeFragment.PREF_SET_NAME, new HashSet<String>());
+        added = FridgeDataSet.add(item);
+        editor.remove(FridgeFragment.PREF_SET_NAME).apply();
+        editor.putStringSet(FridgeFragment.PREF_SET_NAME, FridgeDataSet).apply();
+
+        ((MainActivity)getContext()).updatePagerTabs(); //notify the pageradapter that the fragments need to be updated
+
+        mDataSet = prefs.getStringSet(PREF_SET_NAME, mDataSet);
+        added = mDataSet.remove(item);
+        editor.remove(PREF_SET_NAME).apply();
+        editor.putStringSet(PREF_SET_NAME, mDataSet).apply();
+        mListAdapter.updateDataSet(mDataSet); //remove the item from the visible list
+
+        return added;
+    }
+
+    boolean RemoveFromShoppingList(String item) {
+        boolean removed;
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        SharedPreferences.Editor editor = prefs.edit();
+        mDataSet = prefs.getStringSet(PREF_SET_NAME, mDataSet);
+        removed = mDataSet.remove(item);
+        editor.remove(PREF_SET_NAME).apply();
+        editor.putStringSet(PREF_SET_NAME, mDataSet).apply();
+        mListAdapter.updateDataSet(mDataSet); //remove the item from the visible list
+        return removed;
+    }
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         // Save currently selected layout manager.
         super.onSaveInstanceState(savedInstanceState);
     }
+
 
 }

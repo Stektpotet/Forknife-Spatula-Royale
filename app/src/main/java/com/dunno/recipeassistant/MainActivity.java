@@ -1,10 +1,7 @@
 package com.dunno.recipeassistant;
 
 import android.content.SharedPreferences;
-import android.database.SQLException;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -16,14 +13,8 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ProgressBar;
 
-import java.io.IOException;
-import java.util.List;
-
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashSet;
-import java.util.Iterator;
-import java.util.ListIterator;
+import java.util.List;
 import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
@@ -36,7 +27,6 @@ public class MainActivity extends AppCompatActivity {
     private LockedViewPager mViewPager;
     private SharedPreferences sharedPreferences;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,7 +35,6 @@ public class MainActivity extends AppCompatActivity {
 
         // Ingredients db setup:
         dbHelper = new DbHelper(getApplicationContext());               // Instantiate the connection to local db.
-
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         if (!sharedPreferences.getString(getResources().getString(R.string.shared_preferences_version),  // Check if this is first time setup.
@@ -61,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
 
             // Set shared pref value to current version so next start don't do first time setup.
             sharedPreferences.edit().putString(getResources().getString(R.string.shared_preferences_version), getResources().getString(R.string.shared_preferences_expected_version)).apply();
+
         }
         else {
 
@@ -70,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
                     "NoFlag"));
 
         }
+        
 
         List<Ingredient> ingredients = dbHelper.getIngredientslist();
         List<Recipe> recipes = dbHelper.getRecipelist();
@@ -80,7 +71,12 @@ public class MainActivity extends AppCompatActivity {
 
         Recipe boiled = dbHelper.updateHasValue(recipes.get(0));
 
+
         setupUI();
+    }
+
+    void updatePagerTabs() {
+        mTabPagerAdapter.notifyDataSetChanged();
     }
 
     private void setupUI() {
@@ -109,14 +105,14 @@ public class MainActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             int list = 0; //default to recipes
             switch (item.getItemId()) {
-                case R.id.menu_navigation_shoppingList:
-                    list = 2;
-                    break;
                 case R.id.menu_navigation_recipes:
-                    list = 1;
+                    list = 0;
                     break;
                 case R.id.menu_navigation_fridge:
-                    list = 0;
+                    list = 1;
+                    break;
+                case R.id.menu_navigation_shoppingList:
+                    list = 2;
                     break;
             }
 
@@ -141,14 +137,19 @@ public class MainActivity extends AppCompatActivity {
         public Fragment getItem(int position) {
             Log.i(TAG, "Get the " +position + "th item!!!");
             switch (position) {
+                default:
+                case 0:
+                    return RecipeListFragment.newInstance(0);
+                case 1:
+                    return FridgeFragment.newInstance(0);
                 case 2:
                     return ShoppingListFragment.newInstance(0);
-                case 1:
-                    return RecipeListFragment.newInstance(0);
-                case 0:
-                default:
-                    return FridgeFragment.newInstance(0);
             }
+        }
+
+        @Override
+        public int getItemPosition(Object object) {
+            return POSITION_NONE;
         }
 
         @Override
@@ -161,7 +162,7 @@ public class MainActivity extends AppCompatActivity {
 
             switch (position) {
                 case R.id.menu_navigation_fridge:
-                    return getBaseContext().getResources().getString(R.string.nav_fridge); //TODO: put these into @values/strings
+                    return getBaseContext().getResources().getString(R.string.nav_fridge);
                 case R.id.menu_navigation_recipes:
                     return getBaseContext().getResources().getString(R.string.nav_recipes);
                 case R.id.menu_navigation_shoppingList:

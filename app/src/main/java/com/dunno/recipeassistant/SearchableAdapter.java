@@ -15,14 +15,14 @@ import android.widget.TextView;
 // The standard text view adapter only seems to search from the beginning of whole words
 // so we've had to write this whole class to make it possible to search
 // for parts of the arbitrary string we want
-public class SearchableAdapter extends BaseAdapter implements Filterable {
+public class SearchableAdapter<T> extends BaseAdapter implements Filterable {
 
-    private List<String>originalData = null;
-    private List<String>filteredData = null;
+    private List<T>originalData = null;
+    private List<T>filteredData = null;
     private LayoutInflater mInflater;
     private ItemFilter mFilter = new ItemFilter();
 
-    public SearchableAdapter(Context context, List<String> data) {
+    public SearchableAdapter(Context context, List<T> data) {
         this.filteredData = data ;
         this.originalData = data ;
         mInflater = LayoutInflater.from(context);
@@ -32,13 +32,13 @@ public class SearchableAdapter extends BaseAdapter implements Filterable {
         return filteredData.size();
     }
 
-    public Object getItem(int position) {
+    public T getItem(int position) {
         return filteredData.get(position);
     }
 
     public long getItemId(int position) {
         return position;
-    }
+    } //TODO use actual ID
 
     public View getView(int position, View convertView, ViewGroup parent) {
         // A ViewHolder keeps references to children views to avoid unnecessary calls
@@ -66,7 +66,7 @@ public class SearchableAdapter extends BaseAdapter implements Filterable {
         }
 
         // If weren't re-ordering this you could rely on what you set last time
-        holder.text.setText(filteredData.get(position));
+        holder.text.setText(filteredData.get(position).toString());
 
         return convertView;
     }
@@ -87,17 +87,17 @@ public class SearchableAdapter extends BaseAdapter implements Filterable {
 
             FilterResults results = new FilterResults();
 
-            final List<String> list = originalData;
+            final List<T> list = originalData;
 
             int count = list.size();
-            final ArrayList<String> nlist = new ArrayList<String>(count);
+            final ArrayList<T> nlist = new ArrayList<>(count);
 
-            String filterableString ;
+            T filterableItem;
 
             for (int i = 0; i < count; i++) {
-                filterableString = list.get(i);
-                if (filterableString.toLowerCase().contains(filterString)) {
-                    nlist.add(filterableString);
+                filterableItem = list.get(i);
+                if (filterableItem.toString().toLowerCase().contains(filterString)) {
+                    nlist.add(filterableItem);
                 }
             }
 
@@ -110,7 +110,7 @@ public class SearchableAdapter extends BaseAdapter implements Filterable {
         @SuppressWarnings("unchecked")
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
-            filteredData = (ArrayList<String>) results.values;
+            filteredData = (ArrayList<T>) results.values;
             notifyDataSetChanged();
         }
 

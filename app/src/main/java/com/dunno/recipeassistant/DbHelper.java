@@ -177,7 +177,7 @@ public class DbHelper extends SQLiteOpenHelper {
     public List<Ingredient> getIngredientsInRecipe(int id) {   // Gets ingredients list from db, and sores it in shared preferences.
 
         Cursor cursor = dataBase.rawQuery(  " select * from " + Ingredient.Entry.TABLE_NAME +
-                                                " where _ID = (" +
+                                                " where _ID in (" +
                                                     " select " +RecipeContent.COLUMN_NAME_IngredientID +
                                                     " from " +  RecipeContent.TABLE_NAME +
                                                     " where " + RecipeContent.COLUMN_NAME_RecipeID + " = " + id + ")"

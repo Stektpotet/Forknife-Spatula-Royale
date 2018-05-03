@@ -175,6 +175,9 @@ public class ShoppingListFragment extends Fragment {
         editor.putStringSet(PREF_SET_NAME, mDataSet);
         editor.apply();
         mListAdapter.updateDataSet(mDataSet);
+
+        ((MainActivity)getContext()).updatePagerTabs(); //notify the pageradapter that the fragments need to be updated
+
         return added;
     }
 
@@ -187,14 +190,13 @@ public class ShoppingListFragment extends Fragment {
         added = FridgeDataSet.add(item);
         editor.remove(FridgeFragment.PREF_SET_NAME).apply();
         editor.putStringSet(FridgeFragment.PREF_SET_NAME, FridgeDataSet).apply();
-
-        ((MainActivity)getContext()).updatePagerTabs(); //notify the pageradapter that the fragments need to be updated
-
         mDataSet = prefs.getStringSet(PREF_SET_NAME, mDataSet);
         added = mDataSet.remove(item);
         editor.remove(PREF_SET_NAME).apply();
         editor.putStringSet(PREF_SET_NAME, mDataSet).apply();
         mListAdapter.updateDataSet(mDataSet); //remove the item from the visible list
+
+        ((MainActivity)getContext()).updatePagerTabs(); //notify the pageradapter that the fragments need to be updated
 
         return added;
     }
@@ -208,6 +210,9 @@ public class ShoppingListFragment extends Fragment {
         editor.remove(PREF_SET_NAME).apply();
         editor.putStringSet(PREF_SET_NAME, mDataSet).apply();
         mListAdapter.updateDataSet(mDataSet); //remove the item from the visible list
+
+        ((MainActivity)getContext()).updatePagerTabs(); //notify the pageradapter that the fragments need to be updated
+
         return removed;
     }
 

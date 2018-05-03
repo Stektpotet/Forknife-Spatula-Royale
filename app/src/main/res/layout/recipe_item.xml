@@ -29,8 +29,31 @@
         android:text="Dish Name"
         android:textColor="@color/colorAccent"
         android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@+id/recipeList_item_image"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/recipeList_item_txt_time"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:text="8min"
+        android:textColor="@color/colorAccent"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@id/recipeList_item_image"
         app:layout_constraintEnd_toEndOf="@id/recipeList_item_image"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/recipeList_item_title" />
+
+    <TextView
+        android:id="@+id/recipeList_item_txt_infridge"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:text="59%"
+        android:textColor="@color/colorAccent"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@id/recipeList_item_image"
+        app:layout_constraintStart_toStartOf="@+id/recipeList_item_image" />
 
 </android.support.constraint.ConstraintLayout>

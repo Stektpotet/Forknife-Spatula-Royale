@@ -90,8 +90,6 @@ public class DbHelper extends SQLiteOpenHelper {
 //        db.execSQL(SQL_DELETE_ENTRIES);
     }
 
-
-
     public List<Ingredient> getIngredientslist() {   // Gets ingredients list from db, and sores it in shared preferences.
 
         Cursor cursor = dataBase.rawQuery("select * from " + Ingredient.Entry.TABLE_NAME,null);
@@ -162,6 +160,79 @@ public class DbHelper extends SQLiteOpenHelper {
         cursor.close();
 
         return updateAllHasValues(items);
+    }
+
+    public final static String TAG_TABLE_NAME = "tag";
+    public final static String TAG_COLUMN_NAME_ID = "_ID";
+    public final static String TAG_COLUMN_NAME_Name = "name";
+
+    public Set<RecipeTag> getRecipeTags(int id) {   // Gets tags of a recipe from db
+
+        //select tag._ID, tag.name from tag INNER JOIN recipeTag ON tag._ID = recipeTag.tagId WHERE recipeId = id;
+        Cursor cursor = dataBase.rawQuery(  "select * from " + TAG_TABLE_NAME +
+                " inner join " + RecipeTag.Entry.TABLE_NAME + " on " + TAG_COLUMN_NAME_ID +
+                " = " + RecipeTag.Entry.COLUMN_NAME_recipeId + " where " + RecipeTag.Entry.COLUMN_NAME_recipeId + " = " + id,null);
+        Log.d(TAG, "Get recipe tags by id(" + id + "):");
+        Set<RecipeTag> tags = new HashSet<>();
+        while(cursor.moveToNext()) {
+            int tagID = cursor.getInt(cursor.getColumnIndex(TAG_COLUMN_NAME_ID));
+            String name = cursor.getString(cursor.getColumnIndex(TAG_COLUMN_NAME_Name));
+            RecipeTag tag = new RecipeTag(tagID, name);
+            tags.add(tag);
+            Log.d(TAG, "\tAdding  " + tag.getText());
+        }
+        cursor.close();
+        return tags;
+    }
+
+    public Set<RecipeTag> getActiveTags() { //gets tags that are used by recipes
+        String query = "select * from " +TAG_TABLE_NAME + " where " + TAG_COLUMN_NAME_ID + " in (select distinct " +
+                        RecipeTag.Entry.COLUMN_NAME_tagId + " from " + RecipeTag.Entry.TABLE_NAME + ")";
+        Cursor cursor = dataBase.rawQuery(query,null);
+
+        Set<RecipeTag> tags = new HashSet<>();
+        while(cursor.moveToNext()) {
+            int tagID = cursor.getInt(cursor.getColumnIndex(TAG_COLUMN_NAME_ID));
+            String name = cursor.getString(cursor.getColumnIndex(TAG_COLUMN_NAME_Name));
+            RecipeTag tag = new RecipeTag(tagID, name);
+            tags.add(tag);
+            Log.d(TAG, "\tAdding  " + tag.getText());
+        }
+        cursor.close();
+        return tags;
+    }
+
+    public Set<Recipe> getRecipesWithTags(RecipeTag... tags) {   // Gets tags of a recipe from db
+        if(tags.length < 1) {
+            Log.e(TAG, "DON'T DO THAT YOU FUCKER");
+            return null;
+        }
+        String query = "select distinct "+Recipe.Entry.TABLE_NAME+".* " + "from "+ Recipe.Entry.TABLE_NAME + " inner join " +
+                RecipeTag.Entry.TABLE_NAME + " on " + Recipe.Entry.COLUMN_NAME_ID + " = " +
+                RecipeTag.Entry.COLUMN_NAME_recipeId + " where " + RecipeTag.Entry.COLUMN_NAME_tagId + " = " + tags[0].getId();
+        Log.d(TAG, "Get recipe by tag id(" + tags[0].getId() + "):");
+
+        for(int i = 1; i < tags.length; i++) {
+            query = query + " or "+ RecipeTag.Entry.COLUMN_NAME_tagId + " = " + tags[i].getId();
+            Log.d(TAG, "Get recipe by tag id(" + tags[i].getId() + "):");
+        }
+
+        Cursor cursor = dataBase.rawQuery(query,null);
+
+        Set<Recipe> recipes = new HashSet<>();
+        while(cursor.moveToNext()) {
+            Recipe recipe = new Recipe();
+            recipe.id = cursor.getInt(cursor.getColumnIndex(Recipe.Entry.COLUMN_NAME_ID));
+            recipe.title = cursor.getString(cursor.getColumnIndex(Recipe.Entry.COLUMN_NAME_Title));
+            recipe.time = cursor.getString(cursor.getColumnIndex(Recipe.Entry.COLUMN_NAME_Time));
+            recipe.description = cursor.getString(cursor.getColumnIndex(Recipe.Entry.COLUMN_NAME_Description));
+            recipe.instructions = cursor.getString(cursor.getColumnIndex(Recipe.Entry.COLUMN_NAME_Instructions));
+            recipe.image = cursor.getString(cursor.getColumnIndex(Recipe.Entry.COLUMN_NAME_Image));
+            recipes.add(recipe);
+            Log.d(TAG, "\tAdding  " + recipe.title);
+        }
+        cursor.close();
+        return recipes;
     }
 
     public Recipe getRecipeById(int id) {   // Gets ingredients list from db, and sores it in shared preferences.

@@ -6,6 +6,14 @@ CREATE TABLE IF NOT EXISTS `ingredient`
 	PRIMARY KEY (_ID)
 );
 
+CREATE TABLE IF NOT EXISTS `tag`
+(
+    _ID 	int,
+	name    varchar(250),
+
+	PRIMARY KEY (_ID)
+);
+
 CREATE TABLE IF NOT EXISTS `recipe`
 (
     _ID 	        int,
@@ -16,6 +24,24 @@ CREATE TABLE IF NOT EXISTS `recipe`
     image           varchar(250),
 
 	PRIMARY KEY (_ID)
+);
+
+CREATE TABLE IF NOT EXISTS `recipeTag`
+(
+    recipeId    int,
+	tagId	    int,
+
+	PRIMARY KEY(recipeId, tagId),
+
+	FOREIGN KEY(recipeId)
+		REFERENCES recipe(_ID)
+		ON UPDATE RESTRICT
+		ON DELETE CASCADE,
+
+	FOREIGN KEY(tagId)
+		REFERENCES tag(_ID)
+		ON UPDATE RESTRICT
+		ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS `recipeContent`
@@ -53,7 +79,12 @@ INSERT INTO ingredient (_ID, name) VALUES (14, "Pepper");
 INSERT INTO ingredient (_ID, name) VALUES (15, "Watermelon");
 INSERT INTO ingredient (_ID, name) VALUES (16, "Flour");
 
-
+INSERT INTO tag (_ID, name) VALUES (1, "Dinners");
+INSERT INTO tag (_ID, name) VALUES (2, "Deserts");
+INSERT INTO tag (_ID, name) VALUES (3, "Breakfasts");
+INSERT INTO tag (_ID, name) VALUES (4, "Drinks");
+INSERT INTO tag (_ID, name) VALUES (5, "Appetizers");
+INSERT INTO tag (_ID, name) VALUES (6, "Party Foods");
 
 
 
@@ -66,18 +97,26 @@ INSERT INTO recipe (_ID, title, cookTime, description, instructions, image) VALU
 
 
 INSERT INTO recipeContent (recipeId, ingredientId) VALUES (1, 1);
+INSERT INTO recipeTag (recipeId, tagId) VALUES (1, 3);
 
 INSERT INTO recipeContent (recipeId, ingredientId) VALUES (2, 1);
 INSERT INTO recipeContent (recipeId, ingredientId) VALUES (2, 4);
 INSERT INTO recipeContent (recipeId, ingredientId) VALUES (2, 5);
+INSERT INTO recipeTag (recipeId, tagId) VALUES (2, 1);
+
 
 INSERT INTO recipeContent (recipeId, ingredientId) VALUES (3, 1);
 INSERT INTO recipeContent (recipeId, ingredientId) VALUES (3, 10);
 INSERT INTO recipeContent (recipeId, ingredientId) VALUES (3, 11);
 INSERT INTO recipeContent (recipeId, ingredientId) VALUES (3, 12);
 INSERT INTO recipeContent (recipeId, ingredientId) VALUES (3, 14);
+INSERT INTO recipeTag (recipeId, tagId) VALUES (3, 1);
+
 
 INSERT INTO recipeContent (recipeId, ingredientId) VALUES (4, 1);
 INSERT INTO recipeContent (recipeId, ingredientId) VALUES (4, 13);
 INSERT INTO recipeContent (recipeId, ingredientId) VALUES (4, 16);
 INSERT INTO recipeContent (recipeId, ingredientId) VALUES (4, 8);
+INSERT INTO recipeTag (recipeId, tagId) VALUES (4, 1);
+INSERT INTO recipeTag (recipeId, tagId) VALUES (4, 2);
+

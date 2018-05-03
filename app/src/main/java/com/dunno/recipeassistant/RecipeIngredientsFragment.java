@@ -17,7 +17,9 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class RecipeIngredientsFragment extends Fragment {
@@ -50,7 +52,8 @@ public class RecipeIngredientsFragment extends Fragment {
 
         DbHelper dbHelper = new DbHelper(getContext());
 
-        mListAdapter.addAll(dbHelper.getIngredientsInRecipe(recipeID));
+
+        mListAdapter.addAll();
 
         return rootView;
     }

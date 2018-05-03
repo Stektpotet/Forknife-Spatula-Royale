@@ -1,9 +1,11 @@
 package com.dunno.recipeassistant;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,24 +16,33 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.yalantis.filter.adapter.FilterAdapter;
+import com.yalantis.filter.listener.FilterListener;
+import com.yalantis.filter.widget.Filter;
+import com.yalantis.filter.widget.FilterItem;
+
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class RecipeListFragment extends Fragment {
+public class RecipeListFragment extends Fragment implements FilterListener<RecipeTag> {
 
     public static final String PREF_SET_NAME = "RECIPE_LIST";
 
-
     private static final int SPAN_COUNT = 2;
-    private static final int DATASET_COUNT = 60;
     private static final String KEY_LAYOUT_MANAGER = "layoutManager";
-    private static DbHelper dbHelper;
+    private DbHelper dbHelper;
 
     protected RecyclerView                  mRecyclerView;
     protected RecipeListAdapter             mListAdapter;
     protected RecyclerView.LayoutManager    mLayoutManager;
+
+    protected FilterAdapter<RecipeTag>      mRecipeFilterAdapter;
+    protected Filter<RecipeTag>             mRecipeFilter;
+
     protected Set<Recipe>                   mDataSet = new HashSet<>();
 
     private enum LayoutManagerType {
@@ -56,13 +67,11 @@ public class RecipeListFragment extends Fragment {
 
         dbHelper = new DbHelper(getContext());
 
-        initDataset();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        Log.d("PLES", "THANKS");
         if(mListAdapter != null) {
             mListAdapter.updateDataSet(mDataSet);
         }
@@ -71,6 +80,18 @@ public class RecipeListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_recipelist, container, false);
+        setupUI(rootView);
+
+        if (savedInstanceState != null) {
+            // Restore saved layout manager type.
+            mCurrentLayoutManagerType = (LayoutManagerType) savedInstanceState
+                    .getSerializable(KEY_LAYOUT_MANAGER);
+        }
+
+        return rootView;
+    }
+
+    private void setupUI(View rootView) {
         mRecyclerView = rootView.findViewById(R.id.fragment_recipelist_recyclerView);
 
         // LinearLayoutManager is used here, this will layout the elements in a similar fashion
@@ -78,11 +99,6 @@ public class RecipeListFragment extends Fragment {
         // elements are laid out.
         mLayoutManager = new LinearLayoutManager(getActivity());
 
-        if (savedInstanceState != null) {
-            // Restore saved layout manager type.
-            mCurrentLayoutManagerType = (LayoutManagerType) savedInstanceState
-                    .getSerializable(KEY_LAYOUT_MANAGER);
-        }
         setRecyclerViewLayoutManager(LayoutManagerType.LINEAR_LAYOUT_MANAGER);
 
         mListAdapter = new RecipeListAdapter(mDataSet);
@@ -92,8 +108,8 @@ public class RecipeListFragment extends Fragment {
         mRecyclerView.setAdapter(mListAdapter);
 
         mRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener( getContext(),
-                                                                            mRecyclerView,
-                                                                            new RecyclerItemClickListener.OnItemClickListener() {
+                mRecyclerView,
+                new RecyclerItemClickListener.OnItemClickListener() {
                     @Override public void onItemClick(View view, int position) {
 
                         Intent intent = new Intent(getContext(), RecipeActivity.class);
@@ -107,8 +123,17 @@ public class RecipeListFragment extends Fragment {
                 })
         );
 
+        List<RecipeTag> tags = new ArrayList<>(dbHelper.getActiveTags());
 
-        return rootView;
+        mRecipeFilterAdapter = new RecipeTagAdapter(tags);
+
+        mRecipeFilter = rootView.findViewById(R.id.fragment_recipelist_filter);
+        mRecipeFilter.setAdapter(mRecipeFilterAdapter);
+        mRecipeFilter.setListener(this);
+
+            //the text to show when there's no selected items
+        mRecipeFilter.setNoSelectedItemText(getString(R.string.str_all_selected));
+        mRecipeFilter.build();
     }
 
     /**
@@ -149,10 +174,6 @@ public class RecipeListFragment extends Fragment {
         // Save currently selected layout manager.
         savedInstanceState.putSerializable(KEY_LAYOUT_MANAGER, mCurrentLayoutManagerType);
         super.onSaveInstanceState(savedInstanceState);
-    }
-
-    private void initDataset() {
-        mDataSet = new HashSet<>(dbHelper.getRecipelist());
     }
 
     public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.ViewHolder> {
@@ -225,4 +246,52 @@ public class RecipeListFragment extends Fragment {
     }
 
 
+    @Override
+    public void onFiltersSelected(ArrayList<RecipeTag> arrayList) {
+        mDataSet = new HashSet<>(dbHelper.getRecipesWithTags(arrayList.toArray(new RecipeTag[arrayList.size()])));
+        mListAdapter.updateDataSet(mDataSet);
+    }
+
+    @Override
+    public void onNothingSelected() {
+        mDataSet = new HashSet<>(dbHelper.getRecipelist());
+        mListAdapter.updateDataSet(mDataSet);
+    }
+
+    @Override
+    public void onFilterSelected(RecipeTag recipeTag) {
+        mDataSet = new HashSet<>(dbHelper.getRecipesWithTags(recipeTag));
+        mListAdapter.updateDataSet(mDataSet);
+    }
+
+    @Override
+    public void onFilterDeselected(RecipeTag recipeTag) {
+        Set<Recipe> deselectedRecipe = dbHelper.getRecipesWithTags(recipeTag);
+        mDataSet.removeAll(deselectedRecipe);
+        mListAdapter.updateDataSet(mDataSet);
+    }
+
+
+    //https://github.com/Yalantis/SearchFilter
+    class RecipeTagAdapter extends FilterAdapter<RecipeTag> {
+
+        RecipeTagAdapter(@NotNull List<? extends RecipeTag> items) {
+            super(items);
+        }
+
+        @NotNull
+        @Override
+        public FilterItem createView(int i, RecipeTag recipeTag) {
+            FilterItem filterItem = new FilterItem(getContext());
+
+            filterItem.setStrokeColor(Color.CYAN);
+            filterItem.setTextColor(Color.BLACK);
+            filterItem.setColor(ContextCompat.getColor(getContext(), android.R.color.white));
+            filterItem.setCheckedColor(RecipeTag.GetColor(i+5, 10+i,RecipeTag.SATURATION_BLEACH));
+            filterItem.setText(recipeTag.getText());
+            filterItem.deselect();
+
+            return filterItem;
+        }
+    }
 }

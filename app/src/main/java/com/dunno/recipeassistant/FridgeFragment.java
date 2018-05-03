@@ -146,6 +146,9 @@ public class FridgeFragment extends Fragment {
         editor.putStringSet(PREF_SET_NAME, mDataSet);
         editor.apply();
         mListAdapter.updateDataSet(mDataSet);
+
+        ((MainActivity)getContext()).updatePagerTabs(); //notify the pageradapter that the fragments need to be updated
+
         return added;
     }
 
@@ -157,13 +160,14 @@ public class FridgeFragment extends Fragment {
         editor.remove(ShoppingListFragment.PREF_SET_NAME).apply();
         editor.putStringSet(ShoppingListFragment.PREF_SET_NAME, shoppingListDataSet).apply();
 
-        ((MainActivity)getContext()).updatePagerTabs(); //notify the pageradapter that the fragments need to be updated
-
         mDataSet = prefs.getStringSet(PREF_SET_NAME, mDataSet);
         mDataSet.remove(item);
         editor.remove(PREF_SET_NAME).apply();
         editor.putStringSet(PREF_SET_NAME, mDataSet).apply();
         mListAdapter.updateDataSet(mDataSet); //remove the item from the visible list
+
+        ((MainActivity)getContext()).updatePagerTabs(); //notify the pageradapter that the fragments need to be updated
+
         return true; //TODO look into validating this
     }
 
@@ -175,8 +179,12 @@ public class FridgeFragment extends Fragment {
         mDataSet = prefs.getStringSet(PREF_SET_NAME, mDataSet);
         removed = mDataSet.remove(item);
         editor.remove(PREF_SET_NAME).apply();
+
         editor.putStringSet(PREF_SET_NAME, mDataSet).apply();
         mListAdapter.updateDataSet(mDataSet); //remove the item from the visible list
+
+        ((MainActivity)getContext()).updatePagerTabs(); //notify the pageradapter that the fragments need to be updated
+
         return removed;
     }
 

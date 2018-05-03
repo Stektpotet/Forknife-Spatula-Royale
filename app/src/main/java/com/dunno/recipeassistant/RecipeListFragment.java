@@ -7,13 +7,16 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class RecipeListFragment extends Fragment {
@@ -57,6 +60,15 @@ public class RecipeListFragment extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        Log.d("PLES", "THANKS");
+        if(mListAdapter != null) {
+            mListAdapter.updateDataSet(mDataSet);
+        }
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_recipelist, container, false);
         mRecyclerView = rootView.findViewById(R.id.fragment_recipelist_recyclerView);
@@ -74,6 +86,7 @@ public class RecipeListFragment extends Fragment {
         setRecyclerViewLayoutManager(LayoutManagerType.LINEAR_LAYOUT_MANAGER);
 
         mListAdapter = new RecipeListAdapter(mDataSet);
+        mListAdapter.updateDataSet(mDataSet);
 
         // Set CustomAdapter as the adapter for RecyclerView.
         mRecyclerView.setAdapter(mListAdapter);
@@ -139,7 +152,6 @@ public class RecipeListFragment extends Fragment {
     }
 
     private void initDataset() {
-
         mDataSet = new HashSet<>(dbHelper.getRecipelist());
     }
 
@@ -152,18 +164,27 @@ public class RecipeListFragment extends Fragment {
         public class ViewHolder extends RecyclerView.ViewHolder {
             public ImageView imageView;
             public TextView textView;
+            public TextView hasPercentage;
+            public TextView time;
 
             public ViewHolder(View itemView) {
                 super(itemView);
                 imageView = itemView.findViewById(R.id.recipeList_item_image);
                 textView = itemView.findViewById(R.id.recipeList_item_title);
+                hasPercentage = itemView.findViewById(R.id.recipeList_item_txt_infridge);
+                time = itemView.findViewById(R.id.recipeList_item_txt_time);
             }
 
         }
 
         // Provide a suitable constructor (depends on the kind of dataset)
-        public RecipeListAdapter(Set<Recipe> dataSet) {
-            this.mDataSet = dataSet.toArray(new Recipe[dataSet.size()]);
+        public RecipeListAdapter(Set<Recipe> dataSet) { updateDataSet(dataSet); }
+
+        public void updateDataSet(Set<Recipe> dataSet) {
+            List<Recipe> temp = new ArrayList<>(dataSet);
+            temp = dbHelper.updateAllHasValues(temp);
+            this.mDataSet = temp.toArray(new Recipe[temp.size()]);
+            notifyDataSetChanged();
         }
 
         // Create new views (invoked by the layout manager)
@@ -187,6 +208,8 @@ public class RecipeListFragment extends Fragment {
             int resID = getResources().getIdentifier(this.mDataSet[position].image,
                                                 "drawable", "com.dunno.recipeassistant");
             holder.imageView.setImageResource(resID);
+            holder.hasPercentage.setText(String.valueOf(this.mDataSet[position].hasPercentage*100.0f) + "%");
+            holder.time.setText(this.mDataSet[position].time);
         }
 
         @Override

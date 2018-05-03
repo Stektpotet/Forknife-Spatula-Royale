@@ -46,9 +46,14 @@ public class CommitRecipeActivity extends AppCompatActivity {
             public void onClick(View view) {
                 finish();
             }
-        };doneButton.setOnClickListener(doneButtonListener);
+        };
+        doneButton.setOnClickListener(doneButtonListener);
 
         setupUI();
+    }
+
+    public void setActionBarTitle(CharSequence newTitle) {
+        getSupportActionBar().setTitle(newTitle);
     }
 
     private void setupUI() {
@@ -100,6 +105,8 @@ public class CommitRecipeActivity extends AppCompatActivity {
                 });
 
         itemTouchHelper.attachToRecyclerView(mRecyclerView);
+
+        setActionBarTitle("Dish completed - Well done!");
     }
 
 

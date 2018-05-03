@@ -38,6 +38,7 @@ public class RecipeActivity extends AppCompatActivity {
     public static final String RECIPE_IMAGE             = "image";
 
 
+
     public class SimpleFragmentPagerAdapter extends FragmentPagerAdapter{
 
         final int PAGE_COUNT = 3;
@@ -97,6 +98,12 @@ public class RecipeActivity extends AppCompatActivity {
         }
     }
 
+    public void setActionBarTitle(String newTitle) {
+        getSupportActionBar().setTitle(newTitle);
+    }
+    public void setActionBarTitle(CharSequence newTitle) {
+        getSupportActionBar().setTitle(newTitle);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,6 +141,8 @@ public class RecipeActivity extends AppCompatActivity {
         };
         madeThisButton.setOnClickListener(madeThisButtonListener);
 
+
+        setActionBarTitle(recipe.title);
     }
 
     @Override

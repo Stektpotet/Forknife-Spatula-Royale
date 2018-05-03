@@ -10,11 +10,13 @@ import org.jetbrains.annotations.NotNull;
 public class RecipeTag implements FilterModel {
 
     public static final float SATURATION_BLEACH = 0.4f;
+    public static final float SATURATION_HARD = 1.0f;
+
 
     public static int GetColor(int i, int count, float saturation) {
 
         float hue = ((float)i*360/count);
-        return Color.HSVToColor(new float[]{hue, saturation, 1});
+        return Color.HSVToColor(new float[]{hue, saturation, 0.8f});
     }
 
     public RecipeTag(int id, String tag) {

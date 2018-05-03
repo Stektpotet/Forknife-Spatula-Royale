@@ -44,7 +44,7 @@ public class CommitRecipeActivity extends AppCompatActivity {
         View.OnClickListener doneButtonListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finish();
+                finish(); //TODO look into making the last activity pop of the stack to. i.e. go directly back to the main activity.
             }
         };
         doneButton.setOnClickListener(doneButtonListener);

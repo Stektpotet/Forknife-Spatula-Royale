@@ -149,7 +149,7 @@ public class DbHelper extends SQLiteOpenHelper {
             Recipe recipe = new Recipe();
             recipe.id = cursor.getInt(cursor.getColumnIndex(Recipe.Entry.COLUMN_NAME_ID));
             recipe.title = cursor.getString(cursor.getColumnIndex(Recipe.Entry.COLUMN_NAME_Title));
-            recipe.time = cursor.getString(cursor.getColumnIndex(Recipe.Entry.COLUMN_NAME_Time));
+            recipe.timeInMinutes = cursor.getInt(cursor.getColumnIndex(Recipe.Entry.COLUMN_NAME_Time));
             recipe.description = cursor.getString(cursor.getColumnIndex(Recipe.Entry.COLUMN_NAME_Description));
             recipe.instructions = cursor.getString(cursor.getColumnIndex(Recipe.Entry.COLUMN_NAME_Instructions));
             recipe.image = cursor.getString(cursor.getColumnIndex(Recipe.Entry.COLUMN_NAME_Image));
@@ -224,7 +224,7 @@ public class DbHelper extends SQLiteOpenHelper {
             Recipe recipe = new Recipe();
             recipe.id = cursor.getInt(cursor.getColumnIndex(Recipe.Entry.COLUMN_NAME_ID));
             recipe.title = cursor.getString(cursor.getColumnIndex(Recipe.Entry.COLUMN_NAME_Title));
-            recipe.time = cursor.getString(cursor.getColumnIndex(Recipe.Entry.COLUMN_NAME_Time));
+            recipe.timeInMinutes = cursor.getInt(cursor.getColumnIndex(Recipe.Entry.COLUMN_NAME_Time));
             recipe.description = cursor.getString(cursor.getColumnIndex(Recipe.Entry.COLUMN_NAME_Description));
             recipe.instructions = cursor.getString(cursor.getColumnIndex(Recipe.Entry.COLUMN_NAME_Instructions));
             recipe.image = cursor.getString(cursor.getColumnIndex(Recipe.Entry.COLUMN_NAME_Image));
@@ -245,7 +245,7 @@ public class DbHelper extends SQLiteOpenHelper {
         Recipe recipe = new Recipe();
         recipe.id = cursor.getInt(cursor.getColumnIndex(Recipe.Entry.COLUMN_NAME_ID));
         recipe.title = cursor.getString(cursor.getColumnIndex(Recipe.Entry.COLUMN_NAME_Title));
-        recipe.time = cursor.getString(cursor.getColumnIndex(Recipe.Entry.COLUMN_NAME_Time));
+        recipe.timeInMinutes = cursor.getInt(cursor.getColumnIndex(Recipe.Entry.COLUMN_NAME_Time));
         recipe.description = cursor.getString(cursor.getColumnIndex(Recipe.Entry.COLUMN_NAME_Description));
         recipe.instructions = cursor.getString(cursor.getColumnIndex(Recipe.Entry.COLUMN_NAME_Instructions));
         recipe.image = cursor.getString(cursor.getColumnIndex(Recipe.Entry.COLUMN_NAME_Image));

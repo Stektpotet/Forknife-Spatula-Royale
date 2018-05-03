@@ -65,7 +65,7 @@ public class SearchableAdapter<T> extends BaseAdapter implements Filterable {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        // If weren't re-ordering this you could rely on what you set last time
+        // If weren't re-ordering this you could rely on what you set last timeInMinutes
         holder.text.setText(filteredData.get(position).toString());
 
         return convertView;

@@ -37,26 +37,26 @@ public class MainActivity extends AppCompatActivity {
         dbHelper = new DbHelper(getApplicationContext());               // Instantiate the connection to local db.
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        if (!sharedPreferences.getString(getResources().getString(R.string.shared_preferences_version),  // Check if this is first time setup.
+        if (!sharedPreferences.getString(getResources().getString(R.string.shared_preferences_version),  // Check if this is first timeInMinutes setup.
                 "NoFlag").equals(getResources().getString(R.string.shared_preferences_expected_version))) {
 
 
 
-            Log.d(TAG, "No 'first time set' flag found performing first time setup.");
+            Log.d(TAG, "No 'first timeInMinutes set' flag found performing first timeInMinutes setup.");
             Log.d(TAG, "strings version: " + getResources().getString(R.string.shared_preferences_expected_version));
-            Log.d(TAG, "SP version: " +sharedPreferences.getString(getResources().getString(R.string.shared_preferences_version),  // Check if this is first time setup.
+            Log.d(TAG, "SP version: " +sharedPreferences.getString(getResources().getString(R.string.shared_preferences_version),  // Check if this is first timeInMinutes setup.
                     "NoFlag"));
             dbHelper.firstTimeSetup();  // Load db from file.
 
-            // Set shared pref value to current version so next start don't do first time setup.
+            // Set shared pref value to current version so next start don't do first timeInMinutes setup.
             sharedPreferences.edit().putString(getResources().getString(R.string.shared_preferences_version), getResources().getString(R.string.shared_preferences_expected_version)).apply();
 
         }
         else {
 
-            Log.d(TAG, "Found 'first time set' flag in shared preferences.");
+            Log.d(TAG, "Found 'first timeInMinutes set' flag in shared preferences.");
             Log.d(TAG, "strings version: " + getResources().getString(R.string.shared_preferences_expected_version));
-            Log.d(TAG, "SP version: " +sharedPreferences.getString(getResources().getString(R.string.shared_preferences_version),  // Check if this is first time setup.
+            Log.d(TAG, "SP version: " +sharedPreferences.getString(getResources().getString(R.string.shared_preferences_version),  // Check if this is first timeInMinutes setup.
                     "NoFlag"));
 
         }

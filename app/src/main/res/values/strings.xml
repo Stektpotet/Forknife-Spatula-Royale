@@ -50,7 +50,8 @@
     <string name="commit_textView_ranOut">Did any ingredients run out?</string>
     <string name="fragment_list_empty_status">Oh, it\'s empty…</string>
     <string name="title_activity_ingredient_search">Find Ingredient</string>
-    <string name="str_all_selected">Show All…</string>
+    <string name="str_all_selected">All categories</string>
+    <string name="fragment_recipelist_menu_txt_sort">Sort...</string>
 
     <string-array name="ingredients">
         <item>Milk</item>

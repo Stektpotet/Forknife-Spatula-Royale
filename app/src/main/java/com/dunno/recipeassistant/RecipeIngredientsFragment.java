@@ -20,6 +20,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class RecipeIngredientsFragment extends Fragment {
@@ -28,6 +29,10 @@ public class RecipeIngredientsFragment extends Fragment {
     public static final String STATUS_ADDED = "Added";
     public static final String STATUS_HAS = "Has";
     public static final String STATUS_NEED = "Need";
+
+    private int recipeID = 0;
+    private List<Ingredient> ingredients;
+
 
 
     private Button addAllButton;
@@ -55,18 +60,19 @@ public class RecipeIngredientsFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_recipe_ingredients, container, false);
         setupUI(rootView);
 
-
-
-        int recipeID = getArguments().getInt(RecipeActivity.RECIPE_ID);
+        recipeID = getArguments().getInt(RecipeActivity.RECIPE_ID);
         DbHelper dbHelper = new DbHelper(getContext());
-        mListAdapter.addAll(dbHelper.getIngredientsInRecipe(recipeID));
+        ingredients = dbHelper.getIngredientsInRecipe(recipeID);
+        mListAdapter.addAll(ingredients);
 
         addAllButton = rootView.findViewById(R.id.fragment_recipeIngredients_button_addAll);
         View.OnClickListener addAllButtonListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                mListAdapter.clear();
+                mListAdapter.addAll(ingredients);
                 for (int i = 0; i < mListAdapter.getCount(); i++) {
-//                    mListAdapter.get.getView(i, );
+                    mListAdapter.MoveToShoppingList(mListAdapter.getItem(i));
                 }
             }
         };
@@ -86,7 +92,7 @@ public class RecipeIngredientsFragment extends Fragment {
 
     public class RecipeIngredientAdapter extends ArrayAdapter<Ingredient> {
 
-        boolean MoveToShoppingList(Ingredient item) {
+        public boolean MoveToShoppingList(Ingredient item) {
             Log.d(TAG, "Moving " + item.name + " to shopping list!");
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
             SharedPreferences.Editor editor = prefs.edit();
@@ -138,6 +144,7 @@ public class RecipeIngredientsFragment extends Fragment {
                 status.setTextColor(ContextCompat.getColor(getContext(), R.color.colorStatusNeed));
 
             }
+
 
             addBtn.setOnClickListener(new View.OnClickListener() {
                 @Override

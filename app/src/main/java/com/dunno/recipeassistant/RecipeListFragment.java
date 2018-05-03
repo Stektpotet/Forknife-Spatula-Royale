@@ -208,7 +208,7 @@ public class RecipeListFragment extends Fragment {
             int resID = getResources().getIdentifier(this.mDataSet[position].image,
                                                 "drawable", "com.dunno.recipeassistant");
             holder.imageView.setImageResource(resID);
-            holder.hasPercentage.setText(String.valueOf(this.mDataSet[position].hasPercentage*100.0f) + "%");
+            holder.hasPercentage.setText(String.valueOf((int)(100 * this.mDataSet[position].hasPercentage)) + "%");
             holder.time.setText(this.mDataSet[position].time);
         }
 

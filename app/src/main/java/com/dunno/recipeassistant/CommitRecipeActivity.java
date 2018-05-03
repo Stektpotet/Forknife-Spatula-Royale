@@ -112,12 +112,8 @@ public class CommitRecipeActivity extends AppCompatActivity {
         editor.remove(ShoppingListFragment.PREF_SET_NAME).apply();
         editor.putStringSet(ShoppingListFragment.PREF_SET_NAME, shoppingListDataSet).apply();
 
-        Set<String> mFridgeDataSet = prefs.getStringSet(FridgeFragment.PREF_SET_NAME, new HashSet<String>());
-        mFridgeDataSet.remove(item);
         mDataSet.remove(item);
 
-        editor.remove(FridgeFragment.PREF_SET_NAME).apply();
-        editor.putStringSet(FridgeFragment.PREF_SET_NAME, mFridgeDataSet).apply();
         mListAdapter.updateDataSet(mDataSet); //remove the item from the visible list
 
         return true; //TODO look into validating this

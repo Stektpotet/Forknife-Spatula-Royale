@@ -112,11 +112,14 @@ public class CommitRecipeActivity extends AppCompatActivity {
         editor.remove(ShoppingListFragment.PREF_SET_NAME).apply();
         editor.putStringSet(ShoppingListFragment.PREF_SET_NAME, shoppingListDataSet).apply();
 
-        mDataSet = prefs.getStringSet(FridgeFragment.PREF_SET_NAME, mDataSet);
+        Set<String> mFridgeDataSet = prefs.getStringSet(FridgeFragment.PREF_SET_NAME, new HashSet<String>());
+        mFridgeDataSet.remove(item);
         mDataSet.remove(item);
+
         editor.remove(FridgeFragment.PREF_SET_NAME).apply();
-        editor.putStringSet(FridgeFragment.PREF_SET_NAME, mDataSet).apply();
+        editor.putStringSet(FridgeFragment.PREF_SET_NAME, mFridgeDataSet).apply();
         mListAdapter.updateDataSet(mDataSet); //remove the item from the visible list
+
         return true; //TODO look into validating this
     }
 
@@ -125,10 +128,11 @@ public class CommitRecipeActivity extends AppCompatActivity {
         boolean removed;
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         SharedPreferences.Editor editor = prefs.edit();
-        mDataSet = prefs.getStringSet(FridgeFragment.PREF_SET_NAME, mDataSet);
+        Set<String> mFridgeDataSet = prefs.getStringSet(FridgeFragment.PREF_SET_NAME, new HashSet<String>());
+        removed = mFridgeDataSet.remove(item);
         removed = mDataSet.remove(item);
         editor.remove(FridgeFragment.PREF_SET_NAME).apply();
-        editor.putStringSet(FridgeFragment.PREF_SET_NAME, mDataSet).apply();
+        editor.putStringSet(FridgeFragment.PREF_SET_NAME, mFridgeDataSet).apply();
         mListAdapter.updateDataSet(mDataSet); //remove the item from the visible list
 
         return removed;

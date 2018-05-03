@@ -121,7 +121,17 @@ public class RecipeIngredientsFragment extends Fragment {
             final TextView status = convertView.findViewById(R.id.recipe_ingredients_item_txt_status);
             final Button  addBtn = convertView.findViewById(R.id.recipe_ingredients_item_btn_add);
             // Populate the data into the template view using the data object
-            title.setText(item.name);
+
+            // Fix amount to be print out
+            float amount = item.amount;
+            if (amount % 1 == 0) {
+                title.setText((int)amount + " " + item.unit + " " + item.name);
+
+            }
+            else {
+                title.setText(amount + " " + item.unit + " " + item.name);
+            }
+
 
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
             Set<String> fridgeList = sharedPreferences.getStringSet(FridgeFragment.PREF_SET_NAME, new HashSet<String>());

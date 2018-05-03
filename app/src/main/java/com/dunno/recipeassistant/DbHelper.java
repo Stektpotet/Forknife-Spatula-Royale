@@ -102,6 +102,7 @@ public class DbHelper extends SQLiteOpenHelper {
             Ingredient ingredient = new Ingredient();
             ingredient.id = cursor.getInt(cursor.getColumnIndex(Ingredient.Entry.COLUMN_NAME_ID));
             ingredient.name = cursor.getString(cursor.getColumnIndex(Ingredient.Entry.COLUMN_NAME_NAME));
+            ingredient.unit = cursor.getString(cursor.getColumnIndex(Ingredient.Entry.COLUMN_NAME_UNIT));
             items.add(ingredient);
             Log.d(TAG, "\tAdding  " + ingredient.name);
         }
@@ -121,6 +122,7 @@ public class DbHelper extends SQLiteOpenHelper {
         Ingredient ingredient = new Ingredient();
         ingredient.id = cursor.getInt(cursor.getColumnIndex(Ingredient.Entry.COLUMN_NAME_ID));
         ingredient.name = cursor.getString(cursor.getColumnIndex(Ingredient.Entry.COLUMN_NAME_NAME));
+        ingredient.unit = cursor.getString(cursor.getColumnIndex(Ingredient.Entry.COLUMN_NAME_UNIT));
         Log.d(TAG, "\tGetting  " + ingredient.name);
 
         cursor.close();
@@ -259,11 +261,28 @@ public class DbHelper extends SQLiteOpenHelper {
 
     public List<Ingredient> getIngredientsInRecipe(int id) {   // Gets ingredients list from db, and sores it in shared preferences.
 
-        Cursor cursor = dataBase.rawQuery(  " select * from " + Ingredient.Entry.TABLE_NAME +
-                                                " where _ID in (" +
-                                                    " select " +RecipeContent.COLUMN_NAME_IngredientID +
-                                                    " from " +  RecipeContent.TABLE_NAME +
-                                                    " where " + RecipeContent.COLUMN_NAME_RecipeID + " = " + id + ")"
+        Log.d("TAG", "SQL For getting ingredients from recipe" +
+                " \nselect " +Ingredient.Entry.COLUMN_NAME_ID +
+                "\n, " + Ingredient.Entry.COLUMN_NAME_NAME +
+                "\n, " + Ingredient.Entry.COLUMN_NAME_UNIT +
+                "\n, cont." + RecipeContent.COLUMN_NAME_AMOUNT +
+                "\n from " + Ingredient.Entry.TABLE_NAME +
+                "\n inner join " + RecipeContent.TABLE_NAME + " cont " +
+                "\n on cont." + RecipeContent.COLUMN_NAME_IngredientID +
+                " = " + Ingredient.Entry.COLUMN_NAME_ID +
+                "\n where " + RecipeContent.COLUMN_NAME_RecipeID +
+                " = " + id);
+
+        Cursor cursor = dataBase.rawQuery(  " select " +Ingredient.Entry.COLUMN_NAME_ID +
+                                                ", " + Ingredient.Entry.COLUMN_NAME_NAME +
+                                                ", " + Ingredient.Entry.COLUMN_NAME_UNIT +
+                                                ", cont." + RecipeContent.COLUMN_NAME_AMOUNT +
+                                                " from " + Ingredient.Entry.TABLE_NAME +
+                                                " inner join " + RecipeContent.TABLE_NAME + " cont " +
+                                                " on cont." + RecipeContent.COLUMN_NAME_IngredientID +
+                                                " = " + Ingredient.Entry.COLUMN_NAME_ID +
+                                                " where cont." + RecipeContent.COLUMN_NAME_RecipeID +
+                                                " = " + id
                                                 ,null);
 
         Log.d(TAG, "Get ingredient in recipe(" + id + "):");
@@ -274,6 +293,8 @@ public class DbHelper extends SQLiteOpenHelper {
             Ingredient ingredient = new Ingredient();
             ingredient.id = cursor.getInt(cursor.getColumnIndex(Ingredient.Entry.COLUMN_NAME_ID));
             ingredient.name = cursor.getString(cursor.getColumnIndex(Ingredient.Entry.COLUMN_NAME_NAME));
+            ingredient.unit = cursor.getString(cursor.getColumnIndex(Ingredient.Entry.COLUMN_NAME_UNIT));
+            ingredient.amount = cursor.getFloat(cursor.getColumnIndex(Ingredient.Entry.COLUMN_NAME_UNIT) +1);
             items.add(ingredient);
             Log.d(TAG, "\tAdding  " + ingredient.name);
         }

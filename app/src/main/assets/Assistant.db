@@ -1,7 +1,8 @@
 CREATE TABLE IF NOT EXISTS `ingredient`
 (
     _ID 	int,
-	name    varchar(250),
+	name    varchar(250) UNIQUE,
+	unit    varchar(30),
 
 	PRIMARY KEY (_ID)
 );
@@ -48,6 +49,7 @@ CREATE TABLE IF NOT EXISTS `recipeContent`
 (
 	recipeId 		int,
 	ingredientId	int,
+	amount          real,
 
 	PRIMARY KEY(recipeId, ingredientId),
 
@@ -62,22 +64,23 @@ CREATE TABLE IF NOT EXISTS `recipeContent`
 		ON DELETE CASCADE
 );
 
-INSERT INTO ingredient (_ID, name) VALUES (1, "Eggs");
-INSERT INTO ingredient (_ID, name) VALUES (2, "Chicken ");
-INSERT INTO ingredient (_ID, name) VALUES (3, "Minced Meat");
-INSERT INTO ingredient (_ID, name) VALUES (4, "Garlic");
-INSERT INTO ingredient (_ID, name) VALUES (5, "Onions");
-INSERT INTO ingredient (_ID, name) VALUES (6, "Corn");
-INSERT INTO ingredient (_ID, name) VALUES (7, "Asparagus");
-INSERT INTO ingredient (_ID, name) VALUES (8, "Salt");
-INSERT INTO ingredient (_ID, name) VALUES (9, "Honey");
-INSERT INTO ingredient (_ID, name) VALUES (10, "Pasta");
-INSERT INTO ingredient (_ID, name) VALUES (11, "Bacon");
-INSERT INTO ingredient (_ID, name) VALUES (12, "Parmesan");
-INSERT INTO ingredient (_ID, name) VALUES (13, "Milk");
-INSERT INTO ingredient (_ID, name) VALUES (14, "Pepper");
-INSERT INTO ingredient (_ID, name) VALUES (15, "Watermelon");
-INSERT INTO ingredient (_ID, name) VALUES (16, "Flour");
+INSERT INTO ingredient (_ID, name, unit) VALUES (1, "Eggs", "stk");
+INSERT INTO ingredient (_ID, name, unit) VALUES (2, "Chicken ", "grams");
+INSERT INTO ingredient (_ID, name, unit) VALUES (3, "Minced Meat", "grams");
+INSERT INTO ingredient (_ID, name, unit) VALUES (4, "Garlic", "boats");
+INSERT INTO ingredient (_ID, name, unit) VALUES (5, "Onions", "stk");
+INSERT INTO ingredient (_ID, name, unit) VALUES (6, "Corn", "stk");
+INSERT INTO ingredient (_ID, name, unit) VALUES (7, "Asparagus", "stk");
+INSERT INTO ingredient (_ID, name, unit) VALUES (8, "Salt", "ts");
+INSERT INTO ingredient (_ID, name, unit) VALUES (9, "Honey", "ts");
+INSERT INTO ingredient (_ID, name, unit) VALUES (10, "Pasta", "grams");
+INSERT INTO ingredient (_ID, name, unit) VALUES (11, "Bacon", "grams");
+INSERT INTO ingredient (_ID, name, unit) VALUES (12, "Parmesan", "ts");
+INSERT INTO ingredient (_ID, name, unit) VALUES (13, "Milk", "l");
+INSERT INTO ingredient (_ID, name, unit) VALUES (14, "Pepper", "pinches");
+INSERT INTO ingredient (_ID, name, unit) VALUES (15, "Watermelon", "grams");
+INSERT INTO ingredient (_ID, name, unit) VALUES (16, "Flour", "grams");
+
 
 INSERT INTO tag (_ID, name) VALUES (1, "Dinners");
 INSERT INTO tag (_ID, name) VALUES (2, "Deserts");
@@ -88,35 +91,43 @@ INSERT INTO tag (_ID, name) VALUES (6, "Party Foods");
 
 
 
-
-
 INSERT INTO recipe (_ID, title, cookTime, description, instructions, image) VALUES (1, "Boiled egg", 5, "Egg boiled in water.", "1. put egg in water in pot.\n\n2. boil water.\n\n3 Grab egg with bare hand.", "eggs");
 INSERT INTO recipe (_ID, title, cookTime, description, instructions, image) VALUES (2, "Omelette", 8, "Can't make an omelette without breaking a few eggs.", "1. Break a few eggs.\n\n2. Cut garlic and onions.\n\n3 Mix the eggs with vegetables.\n\n4. Cook blend in pan.", "omelette");
 INSERT INTO recipe (_ID, title, cookTime, description, instructions, image) VALUES (3, "Pasta Carbonara", 20, "Carbonara is an Italian pasta dish from Rome. Made from eggs, paremesan, pepper, pasta and bacon.", "1. Heat olive oil in a large skillet over medium heat, add guanciale (see Cook's Note). Cook, turning occasionally, until evenly browned and crispy, 5 to 10 minutes. Remove from heat and drain on paper towels.\n\n2. Bring a large pot of salted water to a boil. Cook spaghetti in the boiling water, stirring occasionally until tender yet firm to the bite, about 9 minutes. Drain and return to the pot. Let cool, stirring occasionally, about 5 minutes.\n\n3. Whisk eggs, 5 tablespoons pecorino Romano cheese, and some black pepper in a bowl until smooth and creamy. Pour egg mixture over pasta, stirring quickly, until creamy and slightly cooled. Stir in guanciale. Top with remaining 5 tablespoons pecorino Romano cheese and more ground black pepper.", "carbonara");
 INSERT INTO recipe (_ID, title, cookTime, description, instructions, image) VALUES (4, "Pancake", 30, "A pancake is a flat cake, often thin and round, prepared from a starch-based batter that may contain eggs, milk and butter and cooked on a hot surface such as a griddle or frying pan, often frying with oil or butter. ", "1.In a large bowl, sift together the flour, baking powder, salt and sugar. Make a well in the center and pour in the milk, egg and melted butter mix until smooth.\n\n2.Heat a lightly oiled griddle or frying pan over medium high heat. Pour or scoop the batter onto the griddle, using approximately 1/4 cup for each pancake. Brown on both sides and serve hot.", "pancake");
 
 
-INSERT INTO recipeContent (recipeId, ingredientId) VALUES (1, 1);
+
+
+
+
+
+
+INSERT INTO recipeContent (recipeId, ingredientId, amount) VALUES (1, 1, 1);
+
 INSERT INTO recipeTag (recipeId, tagId) VALUES (1, 3);
 
-INSERT INTO recipeContent (recipeId, ingredientId) VALUES (2, 1);
-INSERT INTO recipeContent (recipeId, ingredientId) VALUES (2, 4);
-INSERT INTO recipeContent (recipeId, ingredientId) VALUES (2, 5);
+
+INSERT INTO recipeContent (recipeId, ingredientId, amount) VALUES (2, 1, 2);
+INSERT INTO recipeContent (recipeId, ingredientId, amount) VALUES (2, 4, 2);
+INSERT INTO recipeContent (recipeId, ingredientId, amount) VALUES (2, 5, 1);
+
 INSERT INTO recipeTag (recipeId, tagId) VALUES (2, 1);
 
 
-INSERT INTO recipeContent (recipeId, ingredientId) VALUES (3, 1);
-INSERT INTO recipeContent (recipeId, ingredientId) VALUES (3, 10);
-INSERT INTO recipeContent (recipeId, ingredientId) VALUES (3, 11);
-INSERT INTO recipeContent (recipeId, ingredientId) VALUES (3, 12);
-INSERT INTO recipeContent (recipeId, ingredientId) VALUES (3, 14);
+INSERT INTO recipeContent (recipeId, ingredientId, amount) VALUES (3, 1, 4);
+INSERT INTO recipeContent (recipeId, ingredientId, amount) VALUES (3, 10, 300);
+INSERT INTO recipeContent (recipeId, ingredientId, amount) VALUES (3, 11, 200);
+INSERT INTO recipeContent (recipeId, ingredientId, amount) VALUES (3, 12, 5);
+INSERT INTO recipeContent (recipeId, ingredientId, amount) VALUES (3, 14, 2);
+
 INSERT INTO recipeTag (recipeId, tagId) VALUES (3, 1);
 
 
-INSERT INTO recipeContent (recipeId, ingredientId) VALUES (4, 1);
-INSERT INTO recipeContent (recipeId, ingredientId) VALUES (4, 13);
-INSERT INTO recipeContent (recipeId, ingredientId) VALUES (4, 16);
-INSERT INTO recipeContent (recipeId, ingredientId) VALUES (4, 8);
+INSERT INTO recipeContent (recipeId, ingredientId, amount) VALUES (4, 1, 4);
+INSERT INTO recipeContent (recipeId, ingredientId, amount) VALUES (4, 13, 0.5);
+INSERT INTO recipeContent (recipeId, ingredientId, amount) VALUES (4, 16, 150);
+INSERT INTO recipeContent (recipeId, ingredientId, amount) VALUES (4, 8, 1);
+
 INSERT INTO recipeTag (recipeId, tagId) VALUES (4, 1);
 INSERT INTO recipeTag (recipeId, tagId) VALUES (4, 2);
-

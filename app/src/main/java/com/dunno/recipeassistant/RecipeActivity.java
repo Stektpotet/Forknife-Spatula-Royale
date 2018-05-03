@@ -49,8 +49,6 @@ public class RecipeActivity extends AppCompatActivity {
             super(fm);
             this.context = context;
 
-
-
         }
 
         @Override

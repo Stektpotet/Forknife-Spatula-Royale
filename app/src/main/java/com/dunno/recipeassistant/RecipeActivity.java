@@ -26,6 +26,8 @@ public class RecipeActivity extends AppCompatActivity {
     private ViewPager mViewPager;
     private DbHelper dbHelper;
     private Recipe recipe;
+    private int id = -1;
+    public float hasPercentage = 0;
 
     public static final String RECIPE_ID                = "id";
     public static final String RECIPE_TITLE             = "title";
@@ -104,7 +106,7 @@ public class RecipeActivity extends AppCompatActivity {
         dbHelper = new DbHelper(getApplicationContext());
 
         Intent params = getIntent();
-        int id = params.getIntExtra("recipeId", -1);
+        id = params.getIntExtra("recipeId", -1);
         if (id != -1) {
             recipe = dbHelper.getRecipeById(id);
         }
@@ -113,6 +115,7 @@ public class RecipeActivity extends AppCompatActivity {
             recipe = new Recipe();
             recipe.id = -1;
         }
+        hasPercentage = recipe.hasPercentage;
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
@@ -133,6 +136,21 @@ public class RecipeActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (id != -1) {
+            recipe = dbHelper.getRecipeById(id);
+        }
+        else {
+            Log.e(TAG, "Attempt to get recipe with id -1, that does not exist.");
+            recipe = new Recipe();
+            recipe.id = -1;
+        }
+        hasPercentage = recipe.hasPercentage;
+        // Need to update info fragment description recieves trough bundle
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

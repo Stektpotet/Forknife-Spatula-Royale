@@ -3,4 +3,12 @@
     <color name="colorPrimary">#22262c</color>
     <color name="colorPrimaryDark">#2d4056</color>
     <color name="colorAccent">#ff4081</color>
+
+    <!--Ingredients status colors:-->
+
+    <color name="colorStatusAdd">#5fe205</color>
+    <color name="colorStatusHas">#eba827</color>
+    <color name="colorStatusNeed">#ff521b</color>
+
+
 </resources>

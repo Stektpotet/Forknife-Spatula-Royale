@@ -9,7 +9,7 @@
     <TextView
         android:id="@+id/search_ingredient_item_txt_name"
         android:layout_width="0dp"
-        android:layout_height="48dp"
+        android:layout_height="@dimen/search_item_height"
         android:gravity="center_vertical|center_horizontal"
         android:text="Ingredient Name"
         android:textColor="@color/colorAccent"

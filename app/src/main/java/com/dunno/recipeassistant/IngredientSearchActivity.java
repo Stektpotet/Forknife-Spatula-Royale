@@ -3,7 +3,9 @@ package com.dunno.recipeassistant;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
@@ -20,12 +22,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Filter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -40,6 +44,8 @@ public class IngredientSearchActivity extends AppCompatActivity {
 
     private static DbHelper dbHelper;
 
+    private String customIngredient = "";
+    Button addButton;               // Button for adding custom ingredient as string.
     ListView mSearchResultsListView;
     List<Ingredient> searchResult = new ArrayList<>();
     SearchableAdapter<Ingredient> mSearchableAdapter;
@@ -50,11 +56,12 @@ public class IngredientSearchActivity extends AppCompatActivity {
         setContentView(R.layout.activity_ingredient_search);
         dbHelper = new DbHelper(this);
         searchResult.addAll(dbHelper.getIngredientslist());
-
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         setupUI();
         openOptionsMenu();
 
     }
+
 
     private void setupUI() {
         ActionBar actionBar = getSupportActionBar();
@@ -62,6 +69,20 @@ public class IngredientSearchActivity extends AppCompatActivity {
             // Show the Up button in the action bar.
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+        addButton = findViewById(R.id.activity_ingredient_search_add_button);
+        addButton.setVisibility(View.INVISIBLE);        // not visible until list is empty.
+        View.OnClickListener addButtonListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Add string currently in search field to shoppingList.
+                Intent resultIntent = new Intent();
+                resultIntent.putExtra(KEY_RETURNED_INGREDIENT, customIngredient);
+                setResult(RESULT_OK, resultIntent);
+                finish();
+            }
+        };
+        addButton.setOnClickListener(addButtonListener);
+
         mSearchResultsListView = findViewById(R.id.activity_ingredient_search_list);
         mSearchableAdapter = new SearchableAdapter<>(this, searchResult);
         mSearchResultsListView.setAdapter(mSearchableAdapter);
@@ -75,7 +96,21 @@ public class IngredientSearchActivity extends AppCompatActivity {
                 finish();
             }
         });
+        mSearchResultsListView.setOnHierarchyChangeListener(new AdapterView.OnHierarchyChangeListener() {
+            @Override
+            public void onChildViewAdded(View view, View view1) {addButton.setVisibility(View.INVISIBLE);
+            }
+
+            @Override
+            public void onChildViewRemoved(View view, View view1) {
+                if (mSearchResultsListView.getCount() == 0) {     // If no more items in list.
+                    addButton.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
     }
+
 
 
 
@@ -115,6 +150,8 @@ public class IngredientSearchActivity extends AppCompatActivity {
             @Override
             public boolean onQueryTextChange(String newText) {
                 mSearchableAdapter.getFilter().filter(newText);
+                customIngredient = newText;
+                addButton.setText(getString(R.string.add_this_ingredient_button) + " " + newText);
                 return true;
             }
         });

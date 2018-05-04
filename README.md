@@ -84,3 +84,11 @@ It was also really difficult to get ADB up and running some times, making it rea
 We had great use of the knowledge we got from the database course. Writing the SQL statements and underlying understanding of how SQL works was useful. We learnt more about the different flavours of SQL seing as SQLite has another set of both features and keywords in relation to MySQL.
 
 As our design was very fragment-heavy we learnt more about using them, aswell as learning more about usage of adapters, both for fragments and for different kinds of views (mostly RecyclerView, and it's power)
+
+---
+We've chosen not to focus on testing of the app, in other means than ourselves actually trying out the features of the app, trying to see if they work as they should and trying to see whether or not they make sense from a users perspective.
+In other words, we've simply ran through the added features every time before a major commit to the working branch.
+We chose to rather focus on implementing the wanted feature set as time was limited during the end of the project.
+If we hadn't been slowed down in such a major way when trying to get the database up and running, we would have implemented some unit tests for the database functionality to make sure it worked every time we made changes to areas in the code touching the database. We evaluated this as very time consuming considering we'd already been spending way too much time on the database by then. 
+Undoubtably we could also have added unit test for most of the list-functionality, such as adding/removing/swiping items by validating the changes.
+

@@ -39,6 +39,7 @@ public class ShoppingListFragment extends Fragment {
     protected Set<String>                   mDataSet = new HashSet<>();
     public ShoppingListFragment() {}
 
+
     MenuItem mMenuItemClearAll;
 
     @Override

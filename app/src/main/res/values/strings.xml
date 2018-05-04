@@ -44,13 +44,15 @@
     <string name="nav_recipes">Recipes</string>
     <string name="nav_fridge">Fridge</string>
     <string name="nav_shopping">Shopping List</string>
-    <string name="made_recipe_button">I made this recipe</string>
+    <string name="made_recipe_button">I made this dish</string>
     <string name="add_all_to_shoppinglist">Add all to shoppinglist</string>
     <string name="commit_textView_title_text">Well done</string>
     <string name="commit_textView_ranOut">Did any ingredients run out?</string>
-    <string name="fragment_list_empty_status">Oh, it\'s empty...</string>
+    <string name="fragment_list_empty_status">Oh, it\'s empty…</string>
     <string name="title_activity_ingredient_search">Find Ingredient</string>
     <string name="add_this_ingredient_button">Add  </string>
+    <string name="str_all_selected">All categories</string>
+    <string name="fragment_recipelist_menu_txt_sort">Sort...</string>
 
 
 </resources>

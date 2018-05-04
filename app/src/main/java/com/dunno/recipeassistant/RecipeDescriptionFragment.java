@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.text.MessageFormat;
+
 public class RecipeDescriptionFragment extends Fragment {
 
     private TextView mTextViewTitle;
@@ -42,8 +44,8 @@ public class RecipeDescriptionFragment extends Fragment {
 
 
         mTextViewTitle.setText(this.getArguments().getString(RecipeActivity.RECIPE_TITLE).replaceAll("\\\\n", "\n"));
-        mTextViewTime.setText(this.getArguments().getString(RecipeActivity.RECIPE_TIME).replaceAll("\\\\n", "\n"));
-        mTextViewHas.setText((int)(100 * this.getArguments().getFloat(RecipeActivity.RECIPE_HAS_PERCENTAGE)) + " % in fridge");
+        mTextViewTime.setText(MessageFormat.format("{0}min", this.getArguments().getInt(RecipeActivity.RECIPE_TIME)));
+        mTextViewHas.setText(MessageFormat.format("{0} % in fridge", 100 * this.getArguments().getFloat(RecipeActivity.RECIPE_HAS_PERCENTAGE)));
         mTextViewDescription.setText(this.getArguments().getString(RecipeActivity.RECIPE_DESCRIPTION).replaceAll("\\\\n", "\n"));
 
         int resID = getResources().getIdentifier(this.getArguments().getString(RecipeActivity.RECIPE_IMAGE), "drawable", "com.dunno.recipeassistant");
@@ -58,7 +60,7 @@ public class RecipeDescriptionFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        mTextViewHas.setText("" + ((int)(100 * ((RecipeActivity)getActivity()).hasPercentage)) + " % in fridge");
+        mTextViewHas.setText(MessageFormat.format("{0} % in fridge", (int)(100 * ((RecipeActivity)getActivity()).hasPercentage)));
 
     }
 

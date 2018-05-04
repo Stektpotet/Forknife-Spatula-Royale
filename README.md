@@ -1,11 +1,23 @@
-# Forknife Spatula Royal
+# Forknife Spatula Royale
 ## Project report
 ---
 |         Name          | Student # | 
 | --------------------- | --------- | 
 |Halvor Bakken Smedås   |   473196  |
 |Jone Skaara            |   473181  |
-[TOC]
+
+### [Forknife Spatula Royale](#forknife-spatula-royale)
+
+#### 1. [The Development Process](#the-development-process)
+#### 2. [The Design](#the-design)
+#### 3. [What Was The Project About](#what-was-the-project-about)
+#### 4. [What Features Are Included](#what-features-are-included)
+#### 5. [What Is On Todo (Possible Future Features) List](#what-is-on-todo-possible-future-features-list)
+#### 6. [What Was Easy](#what-was-easy)
+#### 7. [What Was Hard](#what-was-hard)
+#### 8. [What Have We Learnt](#what-have-we-learnt)
+
+
 ---
 ## The development process
 We started out discussing different ideas we found interessting, trying to get a more concrete idea of how they'd work out. After a while we chose to go for one of the ideas: The _Forknife Spatula Royal(TM)_.
@@ -68,7 +80,7 @@ Getting initial SQLite tables set up, communicating with the app, and filling th
 It was also really difficult to get ADB up and running some times, making it really difficult to validate the database internally. We ended up using online tools for validating our queries rather than getting to see the actual databases in the sqlite shell in ADB.
 
 
-## What have you learned
+## What have we learnt
 We had great use of the knowledge we got from the database course. Writing the SQL statements and underlying understanding of how SQL works was useful. We learnt more about the different flavours of SQL seing as SQLite has another set of both features and keywords in relation to MySQL.
 
 As our design was very fragment-heavy we learnt more about using them, aswell as learning more about usage of adapters, both for fragments and for different kinds of views (mostly RecyclerView, and it's power)

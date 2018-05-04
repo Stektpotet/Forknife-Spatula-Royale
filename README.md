@@ -1,9 +1,12 @@
-# Project report - Forknife Spatula Royal
+# Forknife Spatula Royal
+## Project report
+---
 |         Name          | Student # | 
 | --------------------- | --------- | 
 |Halvor Bakken Smedås   |   473196  |
 |Jone Skaara            |   473181  |
-
+[TOC]
+---
 ## The development process
 We started out discussing different ideas we found interessting, trying to get a more concrete idea of how they'd work out. After a while we chose to go for one of the ideas: The _Forknife Spatula Royal(TM)_.
 

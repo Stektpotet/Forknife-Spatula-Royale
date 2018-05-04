@@ -41,9 +41,9 @@ The design is very hevily focused on lists and swipable surfaces, we did this to
 
 This is however untested, so one of our concerns is that our intuition of how our potential users would want interact with the app is wrong. 
 
-| ![GIF of recipe logic](https://i.imgur.com/R32hyGa.gif) |  ![GIF of sorting](https://i.imgur.com/yPB4Zud.gif)
+| [GIF of recipe logic](https://i.imgur.com/R32hyGa.gifv) |  [GIF of sorting](https://i.imgur.com/yPB4Zud.gifv)
 | -------- | -------- |
-|![GIF of filter categories](https://i.imgur.com/a6gpaju.gif)| ![GIF of lists](https://i.imgur.com/pA024xS.gif)     |
+|[GIF of filter categories](https://i.imgur.com/a6gpaju.gifv)| [GIF of lists](https://i.imgur.com/pA024xS.gifv)     |
 
 
 

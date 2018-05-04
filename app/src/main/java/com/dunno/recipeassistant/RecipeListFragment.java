@@ -3,7 +3,6 @@ package com.dunno.recipeassistant;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -18,7 +17,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.yalantis.filter.adapter.FilterAdapter;
 import com.yalantis.filter.listener.FilterListener;
@@ -35,7 +33,6 @@ import java.util.Set;
 
 public class RecipeListFragment extends Fragment implements FilterListener<RecipeTag> {
 
-    public static final String PREF_SET_NAME = "RECIPE_LIST";
     public static final String KEY_SORTING_MODE = "SORT_MODE";
 
     public static final int SPAN_COUNT = 2;
@@ -61,7 +58,7 @@ public class RecipeListFragment extends Fragment implements FilterListener<Recip
 
     public RecipeListFragment() {}
 
-    public static RecipeListFragment newInstance(int entry) {
+    public static RecipeListFragment newInstance() {
         RecipeListFragment fragment = new RecipeListFragment();
         Bundle args = new Bundle();
         //SET ARGS
@@ -74,7 +71,7 @@ public class RecipeListFragment extends Fragment implements FilterListener<Recip
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.fragment_recipelist_menu, menu);
         mMenuItemSortMode = menu.getItem(0);
-        switchSortMode(0);
+        switchSortMode();
 
         super.onCreateOptionsMenu(menu, inflater);
     }
@@ -85,12 +82,16 @@ public class RecipeListFragment extends Fragment implements FilterListener<Recip
             //TOGGLE MODE
             item.setTitle("Sort");
             mSorterIndex++;
-            switchSortMode(mSorterIndex);
+            switchSortMode();
         }
         return super.onOptionsItemSelected(item);
     }
 
-    void switchSortMode(int i) {
+
+    void switchSortMode() {
+        if(mMenuItemSortMode == null) {
+            return;
+        }
         switch (mSorterIndex) {
             default:    mSorterIndex=0; //fallthrough to case: 0
             case 0:
@@ -106,7 +107,7 @@ public class RecipeListFragment extends Fragment implements FilterListener<Recip
                 mSorterComparator = Recipe.BY_TIME_ASCENDING; //lowest time is first
                 mMenuItemSortMode.setIcon(android.R.drawable.ic_menu_recent_history);
                 break;
-        } //TODO make icons or something for these
+        }
         mListAdapter.updateDataSet(mDataSet); //Apply the new sorting
     }
 
@@ -134,7 +135,7 @@ public class RecipeListFragment extends Fragment implements FilterListener<Recip
 
         if (savedInstanceState != null) {
             mSorterIndex = savedInstanceState.getInt(KEY_SORTING_MODE,0);
-            switchSortMode(mSorterIndex);
+            switchSortMode();
             // Restore saved layout manager type.
             mCurrentLayoutManagerType = (LayoutManagerType) savedInstanceState
                     .getSerializable(KEY_LAYOUT_MANAGER);
@@ -236,13 +237,13 @@ public class RecipeListFragment extends Fragment implements FilterListener<Recip
         // Provide a reference to the views for each data item
         // Complex data items may need more than one view per item, and
         // you provide access to all the views for a data item in a view holder
-        public class ViewHolder extends RecyclerView.ViewHolder {
-            public ImageView imageView;
-            public TextView textView;
-            public TextView hasPercentage;
-            public TextView time;
+        class ViewHolder extends RecyclerView.ViewHolder {
+            ImageView imageView;
+            TextView textView;
+            TextView hasPercentage;
+            private TextView time;
 
-            public ViewHolder(View itemView) {
+            ViewHolder(View itemView) {
                 super(itemView);
                 imageView = itemView.findViewById(R.id.recipeList_item_image);
                 textView = itemView.findViewById(R.id.recipeList_item_title);
@@ -253,9 +254,9 @@ public class RecipeListFragment extends Fragment implements FilterListener<Recip
         }
 
         // Provide a suitable constructor (depends on the kind of dataset)
-        public RecipeListAdapter(Set<Recipe> dataSet) { updateDataSet(dataSet); }
+        RecipeListAdapter(Set<Recipe> dataSet) { updateDataSet(dataSet); }
 
-        public void updateDataSet(Set<Recipe> dataSet) {
+        void updateDataSet(Set<Recipe> dataSet) {
             List<Recipe> temp = new ArrayList<>(dataSet);
             temp = dbHelper.updateAllHasValues(temp);
             temp.sort(mSorterComparator);
@@ -279,7 +280,7 @@ public class RecipeListFragment extends Fragment implements FilterListener<Recip
 
             // - get element from your dataset at this position
             // - replace the contents of the view with that element
-//            holder.itemView.setText(mDataSet[position]);
+            //   holder.itemView.setText(mDataSet[position]);
             holder.textView.setText(this.mDataSet[position].title);
             int resID = getResources().getIdentifier(this.mDataSet[position].image,
                                                 "drawable", "com.dunno.recipeassistant");
@@ -293,8 +294,7 @@ public class RecipeListFragment extends Fragment implements FilterListener<Recip
             return this.mDataSet.length;
         }
 
-
-        public int getItemAt(int position) {
+        int getItemAt(int position) {
             return mDataSet[position].id;
         }
 

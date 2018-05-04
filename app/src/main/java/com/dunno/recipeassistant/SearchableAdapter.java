@@ -22,7 +22,7 @@ public class SearchableAdapter<T> extends BaseAdapter implements Filterable {
     private LayoutInflater mInflater;
     private ItemFilter mFilter = new ItemFilter();
 
-    public SearchableAdapter(Context context, List<T> data) {
+    SearchableAdapter(Context context, List<T> data) {
         this.filteredData = data ;
         this.originalData = data ;
         mInflater = LayoutInflater.from(context);
@@ -38,7 +38,7 @@ public class SearchableAdapter<T> extends BaseAdapter implements Filterable {
 
     public long getItemId(int position) {
         return position;
-    } //TODO use actual ID
+    }
 
     public View getView(int position, View convertView, ViewGroup parent) {
         // A ViewHolder keeps references to children views to avoid unnecessary calls

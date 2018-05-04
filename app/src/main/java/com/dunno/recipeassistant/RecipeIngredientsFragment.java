@@ -1,9 +1,7 @@
 package com.dunno.recipeassistant;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -19,7 +17,6 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -31,20 +28,14 @@ public class RecipeIngredientsFragment extends Fragment {
     public static final String STATUS_HAS = "Has";
     public static final String STATUS_NEED = "Need";
 
-    private int recipeID = 0;
     private List<Ingredient> ingredients;
-
-
-
-    private Button addAllButton;
 
 
     public RecipeIngredientsFragment() { }
 
     public static RecipeIngredientsFragment newInstance() {
-        RecipeIngredientsFragment fragment = new RecipeIngredientsFragment();
 
-        return fragment;
+        return new RecipeIngredientsFragment();
     }
 
     @Override
@@ -61,12 +52,12 @@ public class RecipeIngredientsFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_recipe_ingredients, container, false);
         setupUI(rootView);
 
-        recipeID = getArguments().getInt(RecipeActivity.RECIPE_ID);
+        int recipeID = getArguments().getInt(RecipeActivity.RECIPE_ID);
         DbHelper dbHelper = new DbHelper(getContext());
         ingredients = dbHelper.getIngredientsInRecipe(recipeID);
         mListAdapter.addAll(ingredients);
 
-        addAllButton = rootView.findViewById(R.id.fragment_recipeIngredients_button_addAll);
+        Button addAllButton = rootView.findViewById(R.id.fragment_recipeIngredients_button_addAll);
         View.OnClickListener addAllButtonListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -82,10 +73,8 @@ public class RecipeIngredientsFragment extends Fragment {
         return rootView;
     }
 
-    private ListView mIngredientList;
-
     void setupUI(View rootView) {
-        mIngredientList = rootView.findViewById(R.id.fragment_recipeIngredients_listView);
+        ListView mIngredientList = rootView.findViewById(R.id.fragment_recipeIngredients_listView);
         mListAdapter = new RecipeIngredientAdapter(getContext(),  R.layout.fragment_recipe_ingredients);
         mIngredientList.setAdapter(mListAdapter);
     }
@@ -93,7 +82,7 @@ public class RecipeIngredientsFragment extends Fragment {
 
     public class RecipeIngredientAdapter extends ArrayAdapter<Ingredient> {
 
-        public boolean MoveToShoppingList(Ingredient item) {
+        void MoveToShoppingList(Ingredient item) {
             Log.d(TAG, "Moving " + item.name + " to shopping list!");
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
             SharedPreferences.Editor editor = prefs.edit();
@@ -101,10 +90,9 @@ public class RecipeIngredientsFragment extends Fragment {
             shoppingListDataSet.add(item.name);
             editor.remove(ShoppingListFragment.PREF_SET_NAME).apply();
             editor.putStringSet(ShoppingListFragment.PREF_SET_NAME, shoppingListDataSet).apply();
-            return true; //TODO look into validating this
         }
 
-        public RecipeIngredientAdapter(@NonNull Context context, int resource) {
+        RecipeIngredientAdapter(@NonNull Context context, int resource) {
             super(context,0, resource);
         }
 
@@ -124,6 +112,7 @@ public class RecipeIngredientsFragment extends Fragment {
             // Populate the data into the template view using the data object
 
             // Fix amount to be print out
+            assert item != null;
             float amount = item.amount;
             if (amount % 1 == 0) {
                 title.setText((int)amount + " " + item.unit + " " + item.name);

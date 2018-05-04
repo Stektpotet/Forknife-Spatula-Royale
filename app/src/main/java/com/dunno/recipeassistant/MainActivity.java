@@ -11,21 +11,13 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
-import android.widget.ProgressBar;
-
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = MainActivity.class.getName();
 
-    private DbHelper dbHelper;
     private TabPagerAdapter mTabPagerAdapter;
-    private ProgressBar     mProgressBar;
     private LockedViewPager mViewPager;
-    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,9 +26,9 @@ public class MainActivity extends AppCompatActivity {
 
 
         // Ingredients db setup:
-        dbHelper = new DbHelper(getApplicationContext());               // Instantiate the connection to local db.
+        DbHelper dbHelper = new DbHelper(getApplicationContext());
 
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         if (!sharedPreferences.getString(getResources().getString(R.string.shared_preferences_version),  // Check if this is first timeInMinutes setup.
                 "NoFlag").equals(getResources().getString(R.string.shared_preferences_expected_version))) {
 
@@ -44,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
 
             Log.d(TAG, "No 'first timeInMinutes set' flag found performing first timeInMinutes setup.");
             Log.d(TAG, "strings version: " + getResources().getString(R.string.shared_preferences_expected_version));
-            Log.d(TAG, "SP version: " +sharedPreferences.getString(getResources().getString(R.string.shared_preferences_version),  // Check if this is first timeInMinutes setup.
+            Log.d(TAG, "SP version: " + sharedPreferences.getString(getResources().getString(R.string.shared_preferences_version),  // Check if this is first timeInMinutes setup.
                     "NoFlag"));
             dbHelper.firstTimeSetup();  // Load db from file.
 
@@ -56,17 +48,10 @@ public class MainActivity extends AppCompatActivity {
 
             Log.d(TAG, "Found 'first timeInMinutes set' flag in shared preferences.");
             Log.d(TAG, "strings version: " + getResources().getString(R.string.shared_preferences_expected_version));
-            Log.d(TAG, "SP version: " +sharedPreferences.getString(getResources().getString(R.string.shared_preferences_version),  // Check if this is first timeInMinutes setup.
+            Log.d(TAG, "SP version: " + sharedPreferences.getString(getResources().getString(R.string.shared_preferences_version),  // Check if this is first timeInMinutes setup.
                     "NoFlag"));
 
         }
-
-        List<Ingredient> ingredients = dbHelper.getIngredientslist();
-        List<Recipe> recipes = dbHelper.getRecipelist();
-
-        Ingredient ingredient = dbHelper.getIngredientById(1);
-        Recipe recipe = dbHelper.getRecipeById(1);
-        List<Ingredient> omletIngredients = dbHelper.getIngredientsInRecipe(2);
 
         setupUI();
     }
@@ -132,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
      */
     public class TabPagerAdapter extends FragmentPagerAdapter {
 
-        public TabPagerAdapter(FragmentManager fm) {
+        TabPagerAdapter(FragmentManager fm) {
             super(fm);
         }
 
@@ -142,11 +127,11 @@ public class MainActivity extends AppCompatActivity {
             switch (position) {
                 default:
                 case 0:
-                    return RecipeListFragment.newInstance(0);
+                    return RecipeListFragment.newInstance();
                 case 1:
-                    return FridgeFragment.newInstance(0);
+                    return FridgeFragment.newInstance();
                 case 2:
-                    return ShoppingListFragment.newInstance(0);
+                    return ShoppingListFragment.newInstance();
             }
         }
 

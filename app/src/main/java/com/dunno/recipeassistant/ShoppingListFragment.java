@@ -12,6 +12,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -25,13 +26,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class ShoppingListFragment extends Fragment {
-
+    public static final String TAG = ShoppingListFragment.class.getName();
     public static final int DATASET_COUNT = 60;
 
     public static final String PREF_SET_NAME = "SHOPPING_LIST";
-
-    private TextView             mEmptyListStatusText;
-    private FloatingActionButton mAddIngredientButton;
 
     protected RecyclerView.LayoutManager    mLayoutManager;
     protected IngredientListAdapter         mListAdapter;
@@ -54,16 +52,19 @@ public class ShoppingListFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getTitle().equals("Discard All")) {
+        if(item == mMenuItemClearAll) {
+            SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(getActivity()).edit();
+            mDataSet = new HashSet<>();
+            editor.remove(PREF_SET_NAME).apply();
+            editor.putStringSet(PREF_SET_NAME, mDataSet).apply();
 
-        }
-        if (item.getTitle().equals("Clear Prefs")) {
-            PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().clear().apply();
+            mListAdapter.updateDataSet(mDataSet);
+            ((MainActivity)getContext()).updatePagerTabs();
         }
         return super.onOptionsItemSelected(item);
     }
 
-    public static ShoppingListFragment newInstance(int entry) {
+    public static ShoppingListFragment newInstance() {
         ShoppingListFragment fragment = new ShoppingListFragment();
         Bundle args = new Bundle();
         //SET ARGS
@@ -80,12 +81,7 @@ public class ShoppingListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_shoppinglist, container, false);
-        MainActivity activity = (MainActivity) getActivity();
 
-
-        if (savedInstanceState != null) {
-
-        }
         setupUI(rootView);
         return rootView;
     }
@@ -108,11 +104,11 @@ public class ShoppingListFragment extends Fragment {
         mRecyclerView.setAdapter(mListAdapter);
 
 
-        mEmptyListStatusText = rootView.findViewById(R.id.fragment_shoppinglist_txt_empty);
+        TextView mEmptyListStatusText = rootView.findViewById(R.id.fragment_shoppinglist_txt_empty);
         mEmptyListStatusText.setVisibility((mDataSet.size() > 0) ? View.GONE : View.VISIBLE);
 
         //HANDLE NEW ITEM-BUTTON
-        mAddIngredientButton = rootView.findViewById(R.id.fragment_shoppinglist_btn_add);
+        FloatingActionButton mAddIngredientButton = rootView.findViewById(R.id.fragment_shoppinglist_btn_add);
         mAddIngredientButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -164,6 +160,7 @@ public class ShoppingListFragment extends Fragment {
         }
     }
 
+    // Fixing this linter problems would break the functionality.
     //returns false if already existing
     boolean AddItemToShoppingList(String newIngredient) {
         boolean added;
@@ -182,6 +179,7 @@ public class ShoppingListFragment extends Fragment {
         return added;
     }
 
+    // Fixing this linter problems would break the functionality.
     //returns false if already existing
     boolean MoveToFridge(String item) {
         boolean added;
@@ -202,6 +200,7 @@ public class ShoppingListFragment extends Fragment {
         return added;
     }
 
+    // Fixing this linter problems would break the functionality.
     boolean RemoveFromShoppingList(String item) {
         boolean removed;
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());

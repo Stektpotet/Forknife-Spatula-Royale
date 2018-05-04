@@ -25,8 +25,6 @@ public class FridgeFragment extends Fragment {
 
     public static final String TAG = FridgeFragment.class.getName();
 
-    public static final int DATASET_COUNT = 60;
-
     public static final String PREF_SET_NAME = "FRIDGE_LIST";
 
 
@@ -36,7 +34,7 @@ public class FridgeFragment extends Fragment {
     protected Set<String>                   mDataSet = new HashSet<>();
     public FridgeFragment() {}
 
-    public static FridgeFragment newInstance(int entry) {
+    public static FridgeFragment newInstance() {
         FridgeFragment fragment = new FridgeFragment();
         Bundle args = new Bundle();
         //SET ARGS
@@ -54,11 +52,6 @@ public class FridgeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_fridgelist, container, false);
-        MainActivity activity = (MainActivity) getActivity();
-
-        if(savedInstanceState != null) {
-
-        }
 
         setupUI(rootView);
         return rootView;
@@ -152,6 +145,7 @@ public class FridgeFragment extends Fragment {
         return added;
     }
 
+    // Fixing this linter problems would break the functionality.
     boolean MoveToShoppingList(String item) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         SharedPreferences.Editor editor = prefs.edit();
@@ -168,16 +162,15 @@ public class FridgeFragment extends Fragment {
 
         ((MainActivity)getContext()).updatePagerTabs(); //notify the pageradapter that the fragments need to be updated
 
-        return true; //TODO look into validating this
+        return true;
     }
 
 
-    boolean RemoveFromFridge(String item) {
-        boolean removed;
+    void RemoveFromFridge(String item) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         SharedPreferences.Editor editor = prefs.edit();
         mDataSet = prefs.getStringSet(PREF_SET_NAME, mDataSet);
-        removed = mDataSet.remove(item);
+        mDataSet.remove(item);
         editor.remove(PREF_SET_NAME).apply();
 
         editor.putStringSet(PREF_SET_NAME, mDataSet).apply();
@@ -185,7 +178,6 @@ public class FridgeFragment extends Fragment {
 
         ((MainActivity)getContext()).updatePagerTabs(); //notify the pageradapter that the fragments need to be updated
 
-        return removed;
     }
 
 

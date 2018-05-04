@@ -15,4 +15,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <Button
+        android:id="@+id/activity_ingredient_search_add_button"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/search_item_height"
+        android:background="?attr/actionModeSplitBackground"
+        android:text="@string/add_this_ingredient_button"
+        android:textColor="@color/colorAccent"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/activity_ingredient_search_list" />
+
 </android.support.constraint.ConstraintLayout>

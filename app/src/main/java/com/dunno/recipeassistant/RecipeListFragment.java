@@ -91,6 +91,9 @@ public class RecipeListFragment extends Fragment implements FilterListener<Recip
     }
 
     void switchSortMode(int i) {
+        if(mMenuItemSortMode == null) {
+            return;
+        }
         switch (mSorterIndex) {
             default:    mSorterIndex=0; //fallthrough to case: 0
             case 0:

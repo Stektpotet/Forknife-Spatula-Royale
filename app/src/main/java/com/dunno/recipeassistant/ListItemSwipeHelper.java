@@ -3,25 +3,22 @@ package com.dunno.recipeassistant;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Rect;
 import android.graphics.RectF;
-import android.preference.SwitchPreference;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.util.Log;
 
 
 public class ListItemSwipeHelper extends ItemTouchHelper.SimpleCallback {
 
     public static final String TAG = ListItemSwipeHelper.class.getName();
 
-    public static class SwipeBackground {
-        public static final int TEXT_SIZE = 120;
+    static class SwipeBackground {
+        static final int TEXT_SIZE = 120;
         private Paint backgroundPainter;
         private Paint textPainter;
         private String text;
         private float textWidth;
-        public SwipeBackground(String text, int color) {
+        SwipeBackground(String text, int color) {
             this.text = text;
             this.backgroundPainter = new Paint();
             backgroundPainter.setColor(color);
@@ -33,7 +30,7 @@ public class ListItemSwipeHelper extends ItemTouchHelper.SimpleCallback {
             textWidth = textPainter.measureText(text);
         }
 
-        public void draw(Canvas c, RecyclerView.ViewHolder viewHolder, float dX) {
+        void draw(Canvas c, RecyclerView.ViewHolder viewHolder, float dX) {
             RectF area = new RectF(
                             viewHolder.itemView.getLeft(),
                             viewHolder.itemView.getTop(),
@@ -53,7 +50,7 @@ public class ListItemSwipeHelper extends ItemTouchHelper.SimpleCallback {
     private SwipeBackground rightBG;
 
 
-    public ListItemSwipeHelper(int dragDirs, int swipeDirs, SwipeBackground left, SwipeBackground right) {
+    ListItemSwipeHelper(int dragDirs, int swipeDirs, SwipeBackground left, SwipeBackground right) {
         super(dragDirs, swipeDirs);
         this.leftBG = left;
         this.rightBG = right;

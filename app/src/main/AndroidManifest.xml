@@ -20,7 +20,8 @@
         </activity>
         <activity
             android:name=".RecipeActivity"
-            android:label="@string/title_activity_recipe" />
+            android:label="@string/title_activity_recipe"
+            android:noHistory="true"/>
         <activity android:name=".CommitRecipeActivity" />
         <activity android:name=".IngredientSearchActivity"
                 android:launchMode="singleInstance">

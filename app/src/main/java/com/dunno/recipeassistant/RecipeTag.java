@@ -9,17 +9,16 @@ import org.jetbrains.annotations.NotNull;
 
 public class RecipeTag implements FilterModel {
 
-    public static final float SATURATION_BLEACH = 0.4f;
-    public static final float SATURATION_HARD = 1.0f;
+    static final float SATURATION_HARD = 1.0f;
 
 
-    public static int GetColor(int i, int count, float saturation) {
+    static int GetColor(int i, int count, float saturation) {
 
         float hue = ((float)i*360/count);
         return Color.HSVToColor(new float[]{hue, saturation, 0.8f});
     }
 
-    public RecipeTag(int id, String tag) {
+    RecipeTag(int id, String tag) {
         this.mTag = tag;
         this.id = id;
     }
@@ -37,9 +36,9 @@ public class RecipeTag implements FilterModel {
         return id;
     }
 
-    public static class Entry implements BaseColumns {
-        public static final String TABLE_NAME = "recipeTag";
-        public static final String COLUMN_NAME_recipeId = "recipeId";
-        public static final String COLUMN_NAME_tagId = "tagId";
+    static class Entry implements BaseColumns {
+        static final String TABLE_NAME = "recipeTag";
+        static final String COLUMN_NAME_recipeId = "recipeId";
+        static final String COLUMN_NAME_tagId = "tagId";
     }
 }

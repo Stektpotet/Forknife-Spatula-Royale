@@ -1,5 +1,6 @@
 package com.dunno.recipeassistant;
 
+import android.annotation.SuppressLint;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
@@ -42,8 +43,6 @@ public class IngredientSearchActivity extends AppCompatActivity {
 
     public static final String KEY_RETURNED_INGREDIENT = TAG + "ingredient_key";
 
-    private static DbHelper dbHelper;
-
     private String customIngredient = "";
     Button addButton;               // Button for adding custom ingredient as string.
     ListView mSearchResultsListView;
@@ -54,9 +53,8 @@ public class IngredientSearchActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ingredient_search);
-        dbHelper = new DbHelper(this);
+        DbHelper dbHelper = new DbHelper(this);
         searchResult.addAll(dbHelper.getIngredientslist());
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         setupUI();
         openOptionsMenu();
 
@@ -139,6 +137,7 @@ public class IngredientSearchActivity extends AppCompatActivity {
         // Associate searchable configuration with the SearchView
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
+        assert searchManager != null;
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         searchView.setIconifiedByDefault(false);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -147,7 +146,8 @@ public class IngredientSearchActivity extends AppCompatActivity {
                 return false;
             }
 
-            @Override
+            @SuppressLint("SetTextI18n")        // We need to have this space between Add and ___ .
+            @Override                           // The space gets cut off from the string.xml entry.
             public boolean onQueryTextChange(String newText) {
                 mSearchableAdapter.getFilter().filter(newText);
                 customIngredient = newText;

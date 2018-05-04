@@ -1,6 +1,5 @@
 package com.dunno.recipeassistant;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.preference.PreferenceManager;
@@ -10,7 +9,6 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -22,14 +20,15 @@ public class CommitRecipeActivity extends AppCompatActivity {
 
     public static final String TAG = CommitRecipeActivity.class.getName();
 
-    private Button doneButton;
-    private View.OnClickListener doneButtonListener;
     private RecyclerView mRecyclerView;
-    private RecyclerView.LayoutManager mLayoutManager;
     protected Set<String> mDataSet = new HashSet<>();
     protected IngredientListAdapter  mListAdapter;
     private DbHelper dbHelper;
     private int id = 0;
+
+    public CommitRecipeActivity() {
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,11 +39,11 @@ public class CommitRecipeActivity extends AppCompatActivity {
 
         mRecyclerView = findViewById(R.id.commit_recycleView_ingredients);
 
-        doneButton = findViewById(R.id.commit_button_done);
+        Button doneButton = findViewById(R.id.commit_button_done);
         View.OnClickListener doneButtonListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finish(); //TODO look into making the last activity pop of the stack to. i.e. go directly back to the main activity.
+                finish();
             }
         };
         doneButton.setOnClickListener(doneButtonListener);
@@ -52,13 +51,13 @@ public class CommitRecipeActivity extends AppCompatActivity {
         setupUI();
     }
 
-    public void setActionBarTitle(CharSequence newTitle) {
-        getSupportActionBar().setTitle(newTitle);
+    public void setActionBarTitle() {
+        getSupportActionBar().setTitle("Dish completed - Well done!");
     }
 
     private void setupUI() {
         int scrollPosition = 0;
-        mLayoutManager = new LinearLayoutManager(this);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         // If a layout manager has already been set, get current scroll position.
         if (mRecyclerView.getLayoutManager() != null) {
             scrollPosition = ((LinearLayoutManager) mRecyclerView.getLayoutManager())
@@ -106,12 +105,12 @@ public class CommitRecipeActivity extends AppCompatActivity {
 
         itemTouchHelper.attachToRecyclerView(mRecyclerView);
 
-        setActionBarTitle("Dish completed - Well done!");
+        setActionBarTitle();
     }
 
 
 
-    boolean MoveToShoppingList(String item) {
+    void MoveToShoppingList(String item) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         SharedPreferences.Editor editor = prefs.edit();
         Set<String> shoppingListDataSet = prefs.getStringSet(ShoppingListFragment.PREF_SET_NAME, new HashSet<String>());
@@ -123,22 +122,20 @@ public class CommitRecipeActivity extends AppCompatActivity {
 
         mListAdapter.updateDataSet(mDataSet); //remove the item from the visible list
 
-        return true; //TODO look into validating this
     }
 
 
-    boolean RemoveFromFridge(String item) {
-        boolean removed;
+    void RemoveFromFridge(String item) {
+
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         SharedPreferences.Editor editor = prefs.edit();
         Set<String> mFridgeDataSet = prefs.getStringSet(FridgeFragment.PREF_SET_NAME, new HashSet<String>());
-        removed = mFridgeDataSet.remove(item);
-        removed = mDataSet.remove(item);
+        mFridgeDataSet.remove(item);
+        mDataSet.remove(item);
         editor.remove(FridgeFragment.PREF_SET_NAME).apply();
         editor.putStringSet(FridgeFragment.PREF_SET_NAME, mFridgeDataSet).apply();
         mListAdapter.updateDataSet(mDataSet); //remove the item from the visible list
 
-        return removed;
     }
 
 }

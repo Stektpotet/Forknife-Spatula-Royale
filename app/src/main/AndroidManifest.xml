@@ -18,6 +18,19 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".RecipeActivity"
+            android:label="@string/title_activity_recipe" />
+        <activity android:name=".CommitRecipeActivity" />
+        <activity android:name=".IngredientSearchActivity"
+                android:launchMode="singleInstance">
+
+            <meta-data android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

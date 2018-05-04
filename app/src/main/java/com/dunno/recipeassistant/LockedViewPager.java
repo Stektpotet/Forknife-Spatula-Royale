@@ -6,15 +6,13 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 
 public class LockedViewPager extends ViewPager {
-
-    public static final String TAG = LockedViewPager.class.getName();
-
     public LockedViewPager(Context context) {
         super(context);
     }
     public LockedViewPager(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
+
 
     @Override
     public boolean onTouchEvent(MotionEvent ev) {

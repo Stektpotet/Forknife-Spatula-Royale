@@ -1,44 +1,177 @@
 package com.dunno.recipeassistant;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
-import android.widget.TextView;
+import android.widget.ProgressBar;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
 
-    private TextView mTextMessage;
+    public static final String TAG = MainActivity.class.getName();
 
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = new BottomNavigationView.OnNavigationItemSelectedListener() {
-
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.navigation_home:
-                    mTextMessage.setText(R.string.title_home);
-                    return true;
-                case R.id.navigation_dashboard:
-                    mTextMessage.setText(R.string.title_dashboard);
-                    return true;
-                case R.id.navigation_notifications:
-                    mTextMessage.setText(R.string.title_notifications);
-                    return true;
-            }
-            return false;
-        }
-    };
+    private DbHelper dbHelper;
+    private TabPagerAdapter mTabPagerAdapter;
+    private ProgressBar     mProgressBar;
+    private LockedViewPager mViewPager;
+    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mTextMessage = (TextView) findViewById(R.id.message);
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.main_navigationBar);
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
+        // Ingredients db setup:
+        dbHelper = new DbHelper(getApplicationContext());               // Instantiate the connection to local db.
+
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        if (!sharedPreferences.getString(getResources().getString(R.string.shared_preferences_version),  // Check if this is first timeInMinutes setup.
+                "NoFlag").equals(getResources().getString(R.string.shared_preferences_expected_version))) {
+
+
+
+            Log.d(TAG, "No 'first timeInMinutes set' flag found performing first timeInMinutes setup.");
+            Log.d(TAG, "strings version: " + getResources().getString(R.string.shared_preferences_expected_version));
+            Log.d(TAG, "SP version: " +sharedPreferences.getString(getResources().getString(R.string.shared_preferences_version),  // Check if this is first timeInMinutes setup.
+                    "NoFlag"));
+            dbHelper.firstTimeSetup();  // Load db from file.
+
+            // Set shared pref value to current version so next start don't do first timeInMinutes setup.
+            sharedPreferences.edit().putString(getResources().getString(R.string.shared_preferences_version), getResources().getString(R.string.shared_preferences_expected_version)).apply();
+
+        }
+        else {
+
+            Log.d(TAG, "Found 'first timeInMinutes set' flag in shared preferences.");
+            Log.d(TAG, "strings version: " + getResources().getString(R.string.shared_preferences_expected_version));
+            Log.d(TAG, "SP version: " +sharedPreferences.getString(getResources().getString(R.string.shared_preferences_version),  // Check if this is first timeInMinutes setup.
+                    "NoFlag"));
+
+        }
+
+        List<Ingredient> ingredients = dbHelper.getIngredientslist();
+        List<Recipe> recipes = dbHelper.getRecipelist();
+
+        Ingredient ingredient = dbHelper.getIngredientById(1);
+        Recipe recipe = dbHelper.getRecipeById(1);
+        List<Ingredient> omletIngredients = dbHelper.getIngredientsInRecipe(2);
+
+        setupUI();
     }
 
+    void updatePagerTabs() {
+        mTabPagerAdapter.notifyDataSetChanged();
+    }
+
+    private void setupUI() {
+
+        mViewPager = findViewById(R.id.main_viewPager);
+        BottomNavigationView navigation = findViewById(R.id.main_navigationBar);
+        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        mTabPagerAdapter = new TabPagerAdapter(getSupportFragmentManager());
+        // Set up the ViewPager with the sections adapter.
+        mViewPager.setAdapter(mTabPagerAdapter);
+        mViewPager.setCurrentItem(R.id.menu_navigation_recipes);
+        navigation.setSelectedItemId(R.id.menu_navigation_recipes);
+    }
+
+    public void setActionBarTitle(String newTitle) {
+        getSupportActionBar().setTitle(newTitle);
+    }
+    public void setActionBarTitle(CharSequence newTitle) {
+        getSupportActionBar().setTitle(newTitle);
+    }
+
+    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
+            = new BottomNavigationView.OnNavigationItemSelectedListener() {
+
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            int list = 0; //default to recipes
+            switch (item.getItemId()) {
+                case R.id.menu_navigation_recipes:
+                    list = 0;
+                    break;
+                case R.id.menu_navigation_fridge:
+                    list = 1;
+                    break;
+                case R.id.menu_navigation_shoppingList:
+                    list = 2;
+                    break;
+            }
+
+            mViewPager.setCurrentItem(list,true);
+            setActionBarTitle(mViewPager.getAdapter().getPageTitle(item.getItemId()));
+            return true;
+        }
+    };
+
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+
+        updatePagerTabs();
+    }
+
+    /**
+     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
+     * one of the sections/tabs/pages.
+     */
+    public class TabPagerAdapter extends FragmentPagerAdapter {
+
+        public TabPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            Log.i(TAG, "Get the " +position + "th item!!!");
+            switch (position) {
+                default:
+                case 0:
+                    return RecipeListFragment.newInstance(0);
+                case 1:
+                    return FridgeFragment.newInstance(0);
+                case 2:
+                    return ShoppingListFragment.newInstance(0);
+            }
+        }
+
+        @Override
+        public int getItemPosition(Object object) {
+            return POSITION_NONE;
+        }
+
+        @Override
+        public int getCount() {
+            return 3;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+
+            switch (position) {
+                case R.id.menu_navigation_fridge:
+                    return getBaseContext().getResources().getString(R.string.nav_fridge);
+                case R.id.menu_navigation_recipes:
+                    return getBaseContext().getResources().getString(R.string.nav_recipes);
+                case R.id.menu_navigation_shoppingList:
+                    return getBaseContext().getResources().getString(R.string.nav_shopping);
+            }
+            return "How did you get here?";
+        }
+    }
 }

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/fragment_recipelist_menufragment_recipelist_menu_sort"
+        android:icon="@android:drawable/ic_menu_sort_by_size"
+        android:title="@string/fragment_recipelist_menu_txt_sort"
+        app:showAsAction="always|withText" />
+</menu>

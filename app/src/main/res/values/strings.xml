@@ -1,6 +1,75 @@
 <resources>
-    <string name="app_name">RecipeAssistant</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="app_name">RecipeAssistant</string> <!--TODO: Name app -->
+
+    <!-- Shared preferences -->
+    <string name="shared_preferences_version">version</string>
+    <string name="shared_preferences_expected_version">1.0</string>
+
+
+    <string name="title_activity_recipe">RecipeActivity</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="noimage">NoImage</string>
+
+    <!-- Recipe Description -->
+    <string name="recipe_description_fragment_name">Description</string>
+    <string name="recipe_description_title">Coq au vin med hvitvin </string>
+    <string name="recipe_description_has">Has 58%</string>
+    <string name="recipe_description_time">1h 15min</string>
+    <string name="recipe_description_sample">
+        Klassikeren Coq au vin er det mange som kjenner.
+        Bytt ut rødvinen med en tørr hvitvin, så får du denne nydelige hønsegryten.
+        Jo lenger den får stå og kose seg på ovnen, dess bedre blir den.</string>
+
+    <!-- Recipe Ingredients -->
+    <string name="recipe_ingredients_fragment_name">Ingredients</string>
+    <string name="recipe_ingredients_title">Ingredients:</string>
+
+    <!-- Recipe Instructions -->
+    <string name="recipe_instructions_fragment_name">Instructions</string>
+    <string name="recipe_instructions_title">Instructions:</string>
+    <string name="recipe_instructions_sample">
+        1. Del en stor gullhøne i passe store serveringsstykker. Skjær av lårene og del dem i to ved leddet. Skjær ut brystene og del dem i to. Du bestemmer selv om du vil ha med bein eller ikke. Resten av skroget kan du koke kraft på.
+        \n\n2. Varm halvparten av smør og olje i en vid stekepanne og brun hønebitene på begge sider. Legg bitene over i en kjele etter hvert.
+        \n\n3. Grovhakk løk og kutt bacon i grove biter (ca. 2x2 cm). Finhakk hvitløk.
+        \n\n4. Fres løk og bacon i pannen til løken er blank og myk og baconet har endret farge. Tilsett hvitløk og fres videre i ett minutt. Ha alt i gryten sammen med kjøttet.
+        \n\n5. Hell litt hvitvin i pannen, kok ut og hell i gryten.
+        \n\n6. Del aromasopp i biter. Varm stekepannen på nytt med resten av smør og olje og fres soppen i pannen i 4-5 minutter. Ha soppen i gryten sammen med resten av hvitvinen. Tilsett litt vann om nødvendig, til kjøttet er akkurat dekket. Kok opp, sett på lokk og la gryten småkoke i 1-2 timer, til kjøttet er mørt.
+        \n\n7. Tilsett fløte og kok videre i 10 minutter. Smak til med salt og pepper.
+        \n\n8. Rør ut maisenna i litt vann, og tilsett i gryten om du ønsker litt tykkere saus.
+        \n
+        \n\nDryss over hakket persille og server gryten med ferskt brød, poteter eller ris.</string>
+
+
+    <string name="nav_recipes">Recipes</string>
+    <string name="nav_fridge">Fridge</string>
+    <string name="nav_shopping">Shopping List</string>
+    <string name="made_recipe_button">I made this dish</string>
+    <string name="add_all_to_shoppinglist">Add all to shoppinglist</string>
+    <string name="commit_textView_title_text">Well done</string>
+    <string name="commit_textView_ranOut">Did any ingredients run out?</string>
+    <string name="fragment_list_empty_status">Oh, it\'s empty…</string>
+    <string name="title_activity_ingredient_search">Find Ingredient</string>
+    <string name="str_all_selected">All categories</string>
+    <string name="fragment_recipelist_menu_txt_sort">Sort...</string>
+
+    <string-array name="ingredients">
+        <item>Milk</item>
+        <item>Eggs</item>
+        <item>Flour</item>
+        <item>Butter</item>
+        <item>Carrots</item>
+        <item>Potatoes</item>
+        <item>Chicken fillet</item>
+        <item>Minced meat</item>
+        <item>Garlic</item>
+        <item>Onions</item>
+        <item>Corn</item>
+        <item>Asparagus</item>
+        <item>Salt</item>
+        <item>Pepper</item>
+        <item>Honey</item>
+
+    </string-array>
+
 </resources>

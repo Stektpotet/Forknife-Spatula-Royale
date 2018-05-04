@@ -12,6 +12,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -25,7 +26,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class ShoppingListFragment extends Fragment {
-
+    public static final String TAG = ShoppingListFragment.class.getName();
     public static final int DATASET_COUNT = 60;
 
     public static final String PREF_SET_NAME = "SHOPPING_LIST";
@@ -54,11 +55,14 @@ public class ShoppingListFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getTitle().equals("Discard All")) {
+        if(item == mMenuItemClearAll) {
+            SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(getActivity()).edit();
+            mDataSet = new HashSet<>();
+            editor.remove(PREF_SET_NAME).apply();
+            editor.putStringSet(PREF_SET_NAME, mDataSet).apply();
 
-        }
-        if (item.getTitle().equals("Clear Prefs")) {
-            PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().clear().apply();
+            mListAdapter.updateDataSet(mDataSet);
+            ((MainActivity)getContext()).updatePagerTabs();
         }
         return super.onOptionsItemSelected(item);
     }

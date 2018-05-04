@@ -12,11 +12,7 @@ import java.text.MessageFormat;
 
 public class RecipeDescriptionFragment extends Fragment {
 
-    private TextView mTextViewTitle;
     private TextView mTextViewHas;
-    private TextView mTextViewTime;
-    private TextView mTextViewDescription;
-    private ImageView mImageView;
 
     public RecipeDescriptionFragment() {
         // Required empty public constructor
@@ -36,11 +32,11 @@ public class RecipeDescriptionFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_recipe_description, container, false);
-        mTextViewTitle = rootView.findViewById(R.id.fragment_recipeDescription_textView_RecipeTitle);
+        TextView mTextViewTitle = rootView.findViewById(R.id.fragment_recipeDescription_textView_RecipeTitle);
         mTextViewHas = rootView.findViewById(R.id.fragment_recipeDescription_textView_RecipeHas);
-        mTextViewTime = rootView.findViewById(R.id.fragment_recipeDescription_textView_RecipeTime);
-        mTextViewDescription = rootView.findViewById(R.id.fragment_recipeDescription_textView_RecipeDescription);
-        mImageView = rootView.findViewById(R.id.fragment_recipeDescription_image);
+        TextView mTextViewTime = rootView.findViewById(R.id.fragment_recipeDescription_textView_RecipeTime);
+        TextView mTextViewDescription = rootView.findViewById(R.id.fragment_recipeDescription_textView_RecipeDescription);
+        ImageView mImageView = rootView.findViewById(R.id.fragment_recipeDescription_image);
 
 
         mTextViewTitle.setText(this.getArguments().getString(RecipeActivity.RECIPE_TITLE).replaceAll("\\\\n", "\n"));

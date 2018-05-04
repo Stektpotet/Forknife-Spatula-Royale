@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">RecipeAssistant</string> <!--TODO: Name app -->
+    <string name="app_name">Forknife Spatula Rolaye</string>
 
     <!-- Shared preferences -->
     <string name="shared_preferences_version">version</string>

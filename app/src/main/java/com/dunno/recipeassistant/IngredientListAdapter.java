@@ -15,11 +15,11 @@ public class IngredientListAdapter extends RecyclerView.Adapter<IngredientListAd
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        public ImageView imageView;
-        public TextView textView;
+    class ViewHolder extends RecyclerView.ViewHolder {
+        ImageView imageView;
+        TextView textView;
 
-        public ViewHolder(View itemView) {
+        ViewHolder(View itemView) {
             super(itemView);
             imageView = itemView.findViewById(R.id.shopping_ingredients_item_image);
             textView = itemView.findViewById(R.id.shopping_ingredients_item_txt_title);
@@ -27,11 +27,11 @@ public class IngredientListAdapter extends RecyclerView.Adapter<IngredientListAd
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public IngredientListAdapter(Set<String> dataSet) {
+    IngredientListAdapter(Set<String> dataSet) {
         updateDataSet(dataSet);
     }
 
-    public void updateDataSet(Set<String> dataSet) {
+    void updateDataSet(Set<String> dataSet) {
         this.mDataSet = dataSet.toArray(new String[dataSet.size()]);
         notifyDataSetChanged();
     }
@@ -51,7 +51,7 @@ public class IngredientListAdapter extends RecyclerView.Adapter<IngredientListAd
         holder.textView.setText(this.mDataSet[position]);
     }
 
-    public String getItemAt(int position) {
+    String getItemAt(int position) {
         return this.mDataSet[position];
     }
 

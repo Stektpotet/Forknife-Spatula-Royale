@@ -9,7 +9,6 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -19,22 +18,21 @@ import java.util.Set;
 
 public class DbHelper extends SQLiteOpenHelper {
 
-    public static final String TAG = DbHelper.class.getName();
-    public static final int DATABASE_VERSION = 1;
-    public static final String DATABASE_NAME = "Assistant.db";
-    private static String DATABASE_PATH = "";
+    private static final String TAG = DbHelper.class.getName();
+    private static final int DATABASE_VERSION = 1;
+    private static final String DATABASE_NAME = "Assistant.db";
     private Context context;
     private SQLiteDatabase dataBase;
 
 
-    public DbHelper(Context _context) {
+    DbHelper(Context _context) {
         super(_context, DATABASE_NAME, null, DATABASE_VERSION);
         context = _context;
 
         dataBase = this.getWritableDatabase();
     }
 
-    public void firstTimeSetup() {
+    void firstTimeSetup() {
 
         Log.d(TAG, "Attempting to read DB file: " + DATABASE_NAME);
         try {
@@ -49,8 +47,6 @@ public class DbHelper extends SQLiteOpenHelper {
                 db.execSQL(queries[i]);
             }
 
-        } catch (IOException e) {
-            e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -59,10 +55,10 @@ public class DbHelper extends SQLiteOpenHelper {
 
     // Credit to Panos on these who functions:
     // https://stackoverflow.com/questions/12910503/read-file-as-string
-    public String convertStreamToString(InputStream is) throws Exception {
+    private String convertStreamToString(InputStream is) throws Exception {
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));
         StringBuilder sb = new StringBuilder();
-        String line = null;
+        String line;
         while ((line = reader.readLine()) != null) {
             sb.append(line).append("\n");
         }
@@ -70,7 +66,7 @@ public class DbHelper extends SQLiteOpenHelper {
         return sb.toString();
     }
 
-    public String getStringFromFile () throws Exception {
+    private String getStringFromFile() throws Exception {
         InputStream fin = context.getAssets().open(DATABASE_NAME);
         String ret = convertStreamToString(fin);
         //Make sure you close all streams.
@@ -90,13 +86,13 @@ public class DbHelper extends SQLiteOpenHelper {
 //        db.execSQL(SQL_DELETE_ENTRIES);
     }
 
-    public List<Ingredient> getIngredientslist() {   // Gets ingredients list from db, and sores it in shared preferences.
+    List<Ingredient> getIngredientslist() {   // Gets ingredients list from db, and sores it in shared preferences.
 
         Cursor cursor = dataBase.rawQuery("select * from " + Ingredient.Entry.TABLE_NAME,null);
 
         Log.d(TAG, "Get ingredientsList:");
 
-        List items = new ArrayList<Ingredient>();
+        List<Ingredient> items = new ArrayList<Ingredient>();
         while(cursor.moveToNext()) {
 
             Ingredient ingredient = new Ingredient();
@@ -111,7 +107,7 @@ public class DbHelper extends SQLiteOpenHelper {
         return items;
     }
 
-    public Ingredient getIngredientById(int id) {   // Gets ingredients list from db, and sores it in shared preferences.
+    Ingredient getIngredientById(int id) {   // Gets ingredients list from db, and sores it in shared preferences.
 
         Cursor cursor = dataBase.rawQuery(  "select * from " + Ingredient.Entry.TABLE_NAME +
                                                 " where _ID IS " + id,null);
@@ -137,7 +133,7 @@ public class DbHelper extends SQLiteOpenHelper {
         Log.d(TAG, "Removed ingredient with id(" + id + "):");
     }
 
-    public List<Recipe> getRecipelist() {   // Gets ingredients list from db, and sores it in shared preferences.
+    List<Recipe> getRecipelist() {   // Gets ingredients list from db, and sores it in shared preferences.
 
         // Define a projection that specifies which columns from the database
         // you will actually use after this query.
@@ -145,7 +141,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
         Log.d(TAG, "Get recipeList:");
 
-        List items = new ArrayList<Recipe>();
+        List<Recipe> items = new ArrayList<Recipe>();
         while(cursor.moveToNext()) {
 
             Recipe recipe = new Recipe();
@@ -164,9 +160,9 @@ public class DbHelper extends SQLiteOpenHelper {
         return updateAllHasValues(items);
     }
 
-    public final static String TAG_TABLE_NAME = "tag";
-    public final static String TAG_COLUMN_NAME_ID = "_ID";
-    public final static String TAG_COLUMN_NAME_Name = "name";
+    private final static String TAG_TABLE_NAME = "tag";
+    private final static String TAG_COLUMN_NAME_ID = "_ID";
+    private final static String TAG_COLUMN_NAME_Name = "name";
 
     public Set<RecipeTag> getRecipeTags(int id) {   // Gets tags of a recipe from db
 
@@ -187,7 +183,7 @@ public class DbHelper extends SQLiteOpenHelper {
         return tags;
     }
 
-    public Set<RecipeTag> getActiveTags() { //gets tags that are used by recipes
+    Set<RecipeTag> getActiveTags() { //gets tags that are used by recipes
         String query = "select * from " +TAG_TABLE_NAME + " where " + TAG_COLUMN_NAME_ID + " in (select distinct " +
                         RecipeTag.Entry.COLUMN_NAME_tagId + " from " + RecipeTag.Entry.TABLE_NAME + ")";
         Cursor cursor = dataBase.rawQuery(query,null);
@@ -204,22 +200,22 @@ public class DbHelper extends SQLiteOpenHelper {
         return tags;
     }
 
-    public Set<Recipe> getRecipesWithTags(RecipeTag... tags) {   // Gets tags of a recipe from db
+    Set<Recipe> getRecipesWithTags(RecipeTag... tags) {   // Gets tags of a recipe from db
         if(tags.length < 1) {
             Log.e(TAG, "DON'T DO THAT YOU FUCKER");
             return null;
         }
-        String query = "select distinct "+Recipe.Entry.TABLE_NAME+".* " + "from "+ Recipe.Entry.TABLE_NAME + " inner join " +
+        StringBuilder query = new StringBuilder("select distinct " + Recipe.Entry.TABLE_NAME + ".* " + "from " + Recipe.Entry.TABLE_NAME + " inner join " +
                 RecipeTag.Entry.TABLE_NAME + " on " + Recipe.Entry.COLUMN_NAME_ID + " = " +
-                RecipeTag.Entry.COLUMN_NAME_recipeId + " where " + RecipeTag.Entry.COLUMN_NAME_tagId + " = " + tags[0].getId();
+                RecipeTag.Entry.COLUMN_NAME_recipeId + " where " + RecipeTag.Entry.COLUMN_NAME_tagId + " = " + tags[0].getId());
         Log.d(TAG, "Get recipe by tag id(" + tags[0].getId() + "):");
 
         for(int i = 1; i < tags.length; i++) {
-            query = query + " or "+ RecipeTag.Entry.COLUMN_NAME_tagId + " = " + tags[i].getId();
+            query.append(" or " + RecipeTag.Entry.COLUMN_NAME_tagId + " = ").append(tags[i].getId());
             Log.d(TAG, "Get recipe by tag id(" + tags[i].getId() + "):");
         }
 
-        Cursor cursor = dataBase.rawQuery(query,null);
+        Cursor cursor = dataBase.rawQuery(query.toString(),null);
 
         Set<Recipe> recipes = new HashSet<>();
         while(cursor.moveToNext()) {
@@ -237,7 +233,7 @@ public class DbHelper extends SQLiteOpenHelper {
         return recipes;
     }
 
-    public Recipe getRecipeById(int id) {   // Gets ingredients list from db, and sores it in shared preferences.
+    Recipe getRecipeById(int id) {   // Gets ingredients list from db, and sores it in shared preferences.
 
         Cursor cursor = dataBase.rawQuery(  "select * from " + Recipe.Entry.TABLE_NAME +
                 " where _ID IS " + id,null);
@@ -259,7 +255,7 @@ public class DbHelper extends SQLiteOpenHelper {
         return updateHasValue(recipe);
     }
 
-    public List<Ingredient> getIngredientsInRecipe(int id) {   // Gets ingredients list from db, and sores it in shared preferences.
+    List<Ingredient> getIngredientsInRecipe(int id) {   // Gets ingredients list from db, and sores it in shared preferences.
 
         Log.d("TAG", "SQL For getting ingredients from recipe" +
                 " \nselect " +Ingredient.Entry.COLUMN_NAME_ID +
@@ -287,7 +283,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
         Log.d(TAG, "Get ingredient in recipe(" + id + "):");
 
-        List items = new ArrayList<Ingredient>();
+        List<Ingredient> items = new ArrayList<>();
         while(cursor.moveToNext()) {
 
             Ingredient ingredient = new Ingredient();
@@ -303,7 +299,7 @@ public class DbHelper extends SQLiteOpenHelper {
         return items;
     }
 
-    public Recipe updateHasValue(Recipe recipe) {
+    private Recipe updateHasValue(Recipe recipe) {
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         Set<String> fridgeList = sharedPreferences.getStringSet(FridgeFragment.PREF_SET_NAME, new HashSet<String>());
@@ -322,7 +318,7 @@ public class DbHelper extends SQLiteOpenHelper {
         return recipe;
     }
 
-    public List<Recipe> updateAllHasValues(List<Recipe> recipeList) {   // Updates all recipes 'has' values which indicates
+    List<Recipe> updateAllHasValues(List<Recipe> recipeList) {   // Updates all recipes 'has' values which indicates
                                                                 // how many of the required ingredients are in the fridge.
         for (int i = 0; i < recipeList.size(); i++) {
 
@@ -333,7 +329,7 @@ public class DbHelper extends SQLiteOpenHelper {
     }
 
 
-    public void removeRecipeWithId(int id) {   // Gets ingredients list from db, and sores it in shared preferences.
+    void removeRecipeWithId(int id) {   // Gets ingredients list from db, and sores it in shared preferences.
 
         dataBase.rawQuery("delete from " + Recipe.Entry.TABLE_NAME +
                 " where _ID = " + id,null);

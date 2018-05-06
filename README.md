@@ -16,6 +16,7 @@
 #### 6. [What Was Easy](#what-was-easy)
 #### 7. [What Was Hard](#what-was-hard)
 #### 8. [What Have We Learnt](#what-have-we-learnt)
+#### 9. [Notes](#notes)
 
 
 ---
